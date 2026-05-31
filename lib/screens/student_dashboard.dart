@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'result.dart';
-import 'result.dart';
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({Key? key}) : super(key: key);
