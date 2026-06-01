@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'student_dashboard.dart';
+import 'assessment.dart';
+import 'result.dart';
 
 class ProgressPage extends StatefulWidget {
   const ProgressPage({Key? key}) : super(key: key);
@@ -61,8 +64,16 @@ class _ProgressPageState extends State<ProgressPage> {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F1EB),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -113,33 +124,41 @@ class _ProgressPageState extends State<ProgressPage> {
                         label: 'Dashboard',
                         isActive: _selectedNav == 'Dashboard',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Dashboard';
-                          });
-                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const StudentDashboard(),
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Assessment',
                         isActive: _selectedNav == 'Assessment',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Assessment';
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AssessmentPage(),
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Result',
                         isActive: _selectedNav == 'Result',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Result';
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultPage(),
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Progress',
                         isActive: _selectedNav == 'Progress',
@@ -149,13 +168,14 @@ class _ProgressPageState extends State<ProgressPage> {
                           });
                         },
                       ),
-                      const SizedBox(width: 100),
+                      const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(color: const Color(0xFFDDD5CE)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -186,7 +206,6 @@ class _ProgressPageState extends State<ProgressPage> {
                 ],
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFEEEEEE)),
 
             // Content
             Expanded(
@@ -336,28 +355,20 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
           ),
-          const SizedBox(height: 8),
-          if (isActive)
-            Container(
-              width: 40,
-              height: 3,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

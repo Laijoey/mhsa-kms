@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'student_dashboard.dart';
 import 'result.dart';
 
 class AssessmentPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
   Map<int, int> answers = {};
   int currentPage = 0;
   final int perPage = 7;
+  String _selectedNav = 'Assessment';
 
   // DASS-21 Questions
   final List<String> questions = [
@@ -78,48 +80,180 @@ class _AssessmentPageState extends State<AssessmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1EB),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A1A)),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'DASS-21 Assessment',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+      body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F1EB),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Logo and Title
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6B9E7F),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.eco,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'MHSA-KMS',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                          Text(
+                            'MENTAL HEALTH KNOWLEDGE SYSTEM',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Color(0xFF999999),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Navigation and Dropdown
+                  Row(
+                    children: [
+                      _NavButton(
+                        label: 'Dashboard',
+                        isActive: _selectedNav == 'Dashboard',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const StudentDashboard(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Assessment',
+                        isActive: _selectedNav == 'Assessment',
+                        onTap: () {
+                          setState(() {
+                            _selectedNav = 'Assessment';
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Result',
+                        isActive: _selectedNav == 'Result',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ResultPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Progress',
+                        isActive: _selectedNav == 'Progress',
+                        onTap: () {
+                          setState(() {
+                            _selectedNav = 'Progress';
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 60),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFFDDD5CE)),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: DropdownButton<String>(
+                          value: 'Student',
+                          underline: const SizedBox(),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Student',
+                              child: Text(
+                                'Student',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
+                          ],
+                          onChanged: null,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Main Content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'DASS-21',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF999999),
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'How have you been, over the past week?',
-                      style: TextStyle(
-                        fontSize: 32,
+                    // Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'DASS-21',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF999999),
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'How have you been, over the past week?',
+                              style: TextStyle(
+                                fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF1A1A1A),
                       ),
@@ -348,7 +482,45 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   ),
               ],
             ),
+                  ],
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NavButton extends StatelessWidget {
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _NavButton({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
+          ),
         ),
       ),
     );
