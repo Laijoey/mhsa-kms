@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'result.dart';
+import 'assessment.dart';
 
 class StudentDashboard extends StatefulWidget {
   const StudentDashboard({Key? key}) : super(key: key);
@@ -20,8 +21,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F1EB),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,7 +87,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           });
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Assessment',
                         isActive: _selectedNav == 'Assessment',
@@ -86,12 +95,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ResultPage(),
+                              builder: (context) => const AssessmentPage(),
                             ),
                           );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Result',
                         isActive: _selectedNav == 'Result',
@@ -104,7 +113,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Progress',
                         isActive: _selectedNav == 'Progress',
@@ -114,13 +123,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           });
                         },
                       ),
-                      const SizedBox(width: 100),
+                      const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(color: const Color(0xFFDDD5CE)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -197,7 +207,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           ],
                         ),
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AssessmentPage(),
+                              ),
+                            );
+                          },
                           icon: const Icon(Icons.arrow_forward),
                           label: const Text('New assessment'),
                           style: ElevatedButton.styleFrom(
@@ -224,7 +241,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             icon: Icons.assignment,
                             title: 'Self-Assessment',
                             subtitle: '21 short questions · ~5 minutes',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AssessmentPage(),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(width: 24),
@@ -355,27 +379,20 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
-              color: isActive ? const Color(0xFF6B9E7F) : const Color(0xFF999999),
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
           ),
-          if (isActive)
-            Container(
-              margin: const EdgeInsets.only(top: 8),
-              height: 3,
-              width: 30,
-              decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'student_dashboard.dart';
+import 'counsellor_dashboard.dart';
+import 'admin_dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -142,7 +144,15 @@ class _LoginPageState extends State<LoginPage> {
                                 Row(
                                   children: [
                                     ElevatedButton.icon(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const StudentDashboard(),
+                                          ),
+                                        );
+                                      },
                                       icon: const Icon(Icons.arrow_forward),
                                       label:
                                           const Text('Start self-assessment'),
@@ -162,7 +172,15 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                     const SizedBox(width: 20),
                                     OutlinedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const CounsellorDashboard(),
+                                          ),
+                                        );
+                                      },
                                       style: OutlinedButton.styleFrom(
                                         side: const BorderSide(
                                           color: Color(0xFFDDD5CE),
@@ -275,6 +293,9 @@ class _LoginPageState extends State<LoginPage> {
                                           backgroundColor:
                                               const Color(0xFFF0F8F5),
                                           onTap: () {
+                                            setState(() {
+                                              selectedRole = 'student';
+                                            });
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -298,6 +319,13 @@ class _LoginPageState extends State<LoginPage> {
                                             setState(() {
                                               selectedRole = 'counsellor';
                                             });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CounsellorDashboard(),
+                                              ),
+                                            );
                                           },
                                         ),
                                         const SizedBox(height: 12),
@@ -313,6 +341,13 @@ class _LoginPageState extends State<LoginPage> {
                                             setState(() {
                                               selectedRole = 'admin';
                                             });
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const AdminDashboard(),
+                                              ),
+                                            );
                                           },
                                         ),
                                       ],
