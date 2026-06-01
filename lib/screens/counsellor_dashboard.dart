@@ -49,7 +49,7 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -67,7 +67,7 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -264,7 +264,7 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: const Center(
-                                child: Icon(Icons.person, color: Color(0xFF6B9E7F)),
+                                child: Icon(Icons.person, color: Color(0xFF354B0E)),
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -315,7 +315,7 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                             const SizedBox(width: 12),
                             Icon(
                               Icons.arrow_forward,
-                              color: const Color(0xFF6B9E7F),
+                              color: const Color(0xFF354B0E),
                               size: 20,
                             ),
                           ],
@@ -365,7 +365,7 @@ class _NavButton extends StatelessWidget {
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
+                color: const Color(0xFF354B0E),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -404,7 +404,7 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: isAlert ? const Color(0xFFD32F2F) : const Color(0xFF6B9E7F),
+            color: isAlert ? const Color(0xFFD32F2F) : const Color(0xFF354B0E),
             size: 28,
           ),
           const SizedBox(height: 12),

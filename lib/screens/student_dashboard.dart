@@ -15,7 +15,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -23,7 +23,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
               decoration: const BoxDecoration(
-                color: Color(0xFFF5F1EB),
+                color: Color(0xFFF5EFE7),
                 border: Border(
                   bottom: BorderSide(
                     color: Color(0xFFE0E0E0),
@@ -41,7 +41,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -126,8 +126,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: 8,
+                          vertical: 1,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -151,7 +151,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           ],
                           onChanged: null,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: Color(0xFF1A1A1A),
                           ),
                         ),
@@ -218,7 +218,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           icon: const Icon(Icons.arrow_forward),
                           label: const Text('New assessment'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6B9E7F),
+                            backgroundColor: const Color(0xFF354B0E),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 24,
@@ -282,11 +282,11 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
                     // Latest Snapshot Section
                     Container(
-                      padding: const EdgeInsets.all(32),
+                      padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: const Color(0xFFE8E8E8)),
-                        borderRadius: BorderRadius.circular(12),
+                        color: const Color(0xFFF5F1EB),
+                        border: Border.all(color: const Color(0xFFBFB8AD)),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,8 +304,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
+                                  horizontal: 16,
+                                  vertical: 8,
                                 ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFFEBEE),
@@ -322,7 +322,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 40),
                           Row(
                             children: [
                               Expanded(
@@ -382,7 +382,7 @@ class _NavButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Text(
@@ -418,48 +418,55 @@ class _DashboardCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: const Color(0xFFE8E8E8)),
-          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFF5F1EB),
+          border: Border.all(color: const Color(0xFFBFB8AD)),
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8F5E9),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE8F5E9),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Icon(
+                    icon,
+                    color: const Color(0xFF354B0E),
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF999999),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
               child: Icon(
-                icon,
-                color: const Color(0xFF6B9E7F),
+                Icons.arrow_forward,
+                color: Color(0xFF354B0E),
                 size: 24,
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1A1A1A),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Color(0xFF999999),
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Icon(
-              Icons.arrow_forward,
-              color: Color(0xFF6B9E7F),
-              size: 20,
             ),
           ],
         ),
@@ -490,9 +497,9 @@ class _MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: const Color(0xFFE8E8E8)),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFF5F1EB),
+        border: Border.all(color: const Color(0xFFBFB8AD)),
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -49,7 +49,7 @@ class _ResultPageState extends State<ResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -58,7 +58,7 @@ class _ResultPageState extends State<ResultPage> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 decoration: const BoxDecoration(
-                  color: Color(0xFFF5F1EB),
+                  color: Color(0xFFF5EFE7),
                   border: Border(
                     bottom: BorderSide(
                       color: Color(0xFFE0E0E0),
@@ -67,6 +67,7 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Logo and Title
                     Row(
@@ -75,7 +76,7 @@ class _ResultPageState extends State<ResultPage> {
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF6B9E7F),
+                            color: const Color(0xFF354B0E),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -85,9 +86,9 @@ class _ResultPageState extends State<ResultPage> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               'MHSA-KMS',
                               style: TextStyle(
@@ -108,8 +109,8 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    // Navigation Tabs
+
+                    // Navigation and Dropdown
                     Row(
                       children: [
                         _NavButton(
@@ -157,39 +158,40 @@ class _ResultPageState extends State<ResultPage> {
                             });
                           },
                         ),
-                      ],
-                    ),
-                    const Spacer(),
-                    // Student Dropdown
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: const Color(0xFFDDD5CE)),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: DropdownButton<String>(
-                        value: 'Student',
-                        underline: const SizedBox(),
-                        items: const [
-                          DropdownMenuItem(
+                        const SizedBox(width: 60),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 1,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xFFDDD5CE)),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: DropdownButton<String>(
                             value: 'Student',
-                            child: Text('Student'),
+                            underline: const SizedBox(),
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'Student',
+                                child: Text(
+                                  'Student',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onChanged: null,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF1A1A1A),
+                            ),
                           ),
-                          DropdownMenuItem(
-                            value: 'Profile',
-                            child: Text('Profile'),
-                          ),
-                          DropdownMenuItem(
-                            value: 'Logout',
-                            child: Text('Logout'),
-                          ),
-                        ],
-                        onChanged: (value) {},
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -341,7 +343,7 @@ class _ResultPageState extends State<ResultPage> {
                                 icon: const Icon(Icons.arrow_forward),
                                 label: const Text('View progress'),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF6B9E7F),
+                                  backgroundColor: const Color(0xFF354B0E),
                                   foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 24,
@@ -408,7 +410,7 @@ class _NavButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Text(

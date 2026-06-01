@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF6B9E7F),
+                                        color: const Color(0xFF354B0E),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: const Icon(
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Color(0xFF6B9E7F),
+                                        color: Color(0xFF354B0E),
                                       ),
                                     ),
                                   ],
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                                         style: TextStyle(
                                           fontSize: 56,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xFF6B9E7F),
+                                          color: Color(0xFF354B0E),
                                           height: 1.2,
                                         ),
                                       ),
@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                           const Text('Start self-assessment'),
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor:
-                                            const Color(0xFF6B9E7F),
+                                            const Color(0xFF354B0E),
                                         foregroundColor: Colors.white,
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 24,
@@ -211,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w700,
-                                    color: Color(0xFF6B9E7F),
+                                    color: Color(0xFF354B0E),
                                     letterSpacing: 0.4,
                                   ),
                                 ),
@@ -397,7 +397,7 @@ class _FeatureChip extends StatelessWidget {
           Icon(
             icon,
             size: 16,
-            color: const Color(0xFF6B9E7F),
+            color: const Color(0xFF354B0E),
           ),
           const SizedBox(width: 8),
           Text(
@@ -441,7 +441,7 @@ class _RoleCard extends StatelessWidget {
           color: backgroundColor,
           border: Border.all(
             color:
-                isSelected ? const Color(0xFF6B9E7F) : const Color(0xFFE0E0E0),
+                isSelected ? const Color(0xFF354B0E) : const Color(0xFFE0E0E0),
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -457,7 +457,7 @@ class _RoleCard extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                color: const Color(0xFF6B9E7F),
+                color: const Color(0xFF354B0E),
                 size: 24,
               ),
             ),
@@ -491,7 +491,7 @@ class _RoleCard extends StatelessWidget {
             const SizedBox(width: 12),
             Icon(
               Icons.arrow_forward,
-              color: const Color(0xFF6B9E7F),
+              color: const Color(0xFF354B0E),
               size: 20,
             ),
           ],
