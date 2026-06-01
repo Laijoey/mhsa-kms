@@ -37,7 +37,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -55,7 +55,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -353,7 +353,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF6B9E7F),
+                                      color: Color(0xFF354B0E),
                                     ),
                                   ),
                                   const SizedBox(height: 6),
@@ -378,7 +378,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                                   icon: const Icon(Icons.phone),
                                   label: const Text('Contact Student'),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF6B9E7F),
+                                    backgroundColor: const Color(0xFF354B0E),
                                     foregroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16,
@@ -446,7 +446,7 @@ class _NavButton extends StatelessWidget {
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
+                color: const Color(0xFF354B0E),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

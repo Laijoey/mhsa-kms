@@ -47,7 +47,7 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
   Color _getCategoryColor(String category) {
     switch (category) {
       case 'Clinical Guide':
-        return const Color(0xFF6B9E7F);
+        return const Color(0xFF354B0E);
       case 'Research':
         return const Color(0xFFF57C00);
       case 'Procedure':
@@ -62,7 +62,7 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -80,7 +80,7 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -344,7 +344,7 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                                   icon: const Icon(Icons.open_in_new, size: 16),
                                   label: const Text('Read'),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF6B9E7F),
+                                    backgroundColor: const Color(0xFF354B0E),
                                     foregroundColor: Colors.white,
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 16,
@@ -404,7 +404,7 @@ class _NavButton extends StatelessWidget {
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
+                color: const Color(0xFF354B0E),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

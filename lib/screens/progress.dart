@@ -58,7 +58,7 @@ class _ProgressPageState extends State<ProgressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -66,7 +66,7 @@ class _ProgressPageState extends State<ProgressPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
               decoration: const BoxDecoration(
-                color: Color(0xFFF5F1EB),
+                color: Color(0xFFF5EFE7),
                 border: Border(
                   bottom: BorderSide(
                     color: Color(0xFFE0E0E0),
@@ -84,7 +84,7 @@ class _ProgressPageState extends State<ProgressPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -171,8 +171,8 @@ class _ProgressPageState extends State<ProgressPage> {
                       const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: 8,
+                          vertical: 1,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -196,7 +196,7 @@ class _ProgressPageState extends State<ProgressPage> {
                           ],
                           onChanged: null,
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: Color(0xFF1A1A1A),
                           ),
                         ),
@@ -358,7 +358,7 @@ class _NavButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? const Color(0xFF6B9E7F) : Colors.transparent,
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
         ),
         child: Text(

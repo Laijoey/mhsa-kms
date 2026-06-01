@@ -38,7 +38,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EB),
+      backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
         child: Column(
           children: [
@@ -56,7 +56,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6B9E7F),
+                          color: const Color(0xFF354B0E),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -250,7 +250,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           icon: const Icon(Icons.add),
                           label: const Text('Add Question'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6B9E7F),
+                            backgroundColor: const Color(0xFF354B0E),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -284,7 +284,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xFF6B9E7F),
+                                      color: Color(0xFF354B0E),
                                     ),
                                   ),
                                   const SizedBox(height: 6),
@@ -332,7 +332,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                           style: const TextStyle(
                                             fontSize: 11,
                                             fontWeight: FontWeight.w600,
-                                            color: Color(0xFF6B9E7F),
+                                            color: Color(0xFF354B0E),
                                           ),
                                         ),
                                       ),
@@ -344,7 +344,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             const SizedBox(width: 12),
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              color: const Color(0xFF6B9E7F),
+                              color: const Color(0xFF354B0E),
                               onPressed: () {},
                             ),
                             IconButton(
@@ -399,7 +399,7 @@ class _NavButton extends StatelessWidget {
               width: 40,
               height: 3,
               decoration: BoxDecoration(
-                color: const Color(0xFF6B9E7F),
+                color: const Color(0xFF354B0E),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -434,7 +434,7 @@ class _StatCard extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: const Color(0xFF6B9E7F),
+            color: const Color(0xFF354B0E),
             size: 28,
           ),
           const SizedBox(height: 12),
