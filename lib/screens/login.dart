@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'student_dashboard.dart';
+import 'student_login.dart';
 import 'counsellor_dashboard.dart';
 import 'admin_dashboard.dart';
 
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                const StudentDashboard(),
+                                                const StudentLoginPage(),
                                           ),
                                         );
                                       },
@@ -300,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const StudentDashboard(),
+                                                    const StudentLoginPage(),
                                               ),
                                             );
                                           },

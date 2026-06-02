@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'student_dashboard.dart';
 import 'assessment.dart';
+import 'progress.dart';
+import 'student_session.dart';
 
 class ResultPage extends StatefulWidget {
   final int depression;
   final int anxiety;
   final int stress;
+  final StudentSession? session;
 
   const ResultPage({
     Key? key,
     this.depression = 0,
     this.anxiety = 0,
     this.stress = 0,
+    this.session,
   }) : super(key: key);
 
   @override
@@ -46,6 +50,12 @@ class _ResultPageState extends State<ResultPage> {
     }
   }
 
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +66,8 @@ class _ResultPageState extends State<ResultPage> {
             children: [
               // Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                 decoration: const BoxDecoration(
                   color: Color(0xFFF5EFE7),
                   border: Border(
@@ -120,7 +131,9 @@ class _ResultPageState extends State<ResultPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const StudentDashboard(),
+                                builder: (context) => StudentDashboard(
+                                  session: widget.session,
+                                ),
                               ),
                             );
                           },
@@ -133,7 +146,9 @@ class _ResultPageState extends State<ResultPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const AssessmentPage(),
+                                builder: (context) => AssessmentPage(
+                                  session: widget.session,
+                                ),
                               ),
                             );
                           },
@@ -153,9 +168,14 @@ class _ResultPageState extends State<ResultPage> {
                           label: 'Progress',
                           isActive: _selectedNav == 'Progress',
                           onTap: () {
-                            setState(() {
-                              _selectedNav = 'Progress';
-                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProgressPage(
+                                  session: widget.session,
+                                ),
+                              ),
+                            );
                           },
                         ),
                         const SizedBox(width: 60),
@@ -183,8 +203,18 @@ class _ResultPageState extends State<ResultPage> {
                                   ),
                                 ),
                               ),
+                              DropdownMenuItem(
+                                value: 'logout',
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                              ),
                             ],
-                            onChanged: null,
+                            onChanged: _handleAccountAction,
                             style: const TextStyle(
                               fontSize: 12,
                               color: Color(0xFF1A1A1A),
@@ -198,7 +228,8 @@ class _ResultPageState extends State<ResultPage> {
               ),
               // Content
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -240,8 +271,10 @@ class _ResultPageState extends State<ResultPage> {
                             score: '${widget.depression}',
                             maxScore: '42',
                             status: _getSeverity(widget.depression),
-                            statusColor: _getSeverityColor(_getSeverity(widget.depression)),
-                            progressColor: _getSeverityColor(_getSeverity(widget.depression)),
+                            statusColor: _getSeverityColor(
+                                _getSeverity(widget.depression)),
+                            progressColor: _getSeverityColor(
+                                _getSeverity(widget.depression)),
                           ),
                         ),
                         const SizedBox(width: 24),
@@ -251,8 +284,10 @@ class _ResultPageState extends State<ResultPage> {
                             score: '${widget.anxiety}',
                             maxScore: '42',
                             status: _getSeverity(widget.anxiety),
-                            statusColor: _getSeverityColor(_getSeverity(widget.anxiety)),
-                            progressColor: _getSeverityColor(_getSeverity(widget.anxiety)),
+                            statusColor:
+                                _getSeverityColor(_getSeverity(widget.anxiety)),
+                            progressColor:
+                                _getSeverityColor(_getSeverity(widget.anxiety)),
                           ),
                         ),
                         const SizedBox(width: 24),
@@ -262,8 +297,10 @@ class _ResultPageState extends State<ResultPage> {
                             score: '${widget.stress}',
                             maxScore: '42',
                             status: _getSeverity(widget.stress),
-                            statusColor: _getSeverityColor(_getSeverity(widget.stress)),
-                            progressColor: _getSeverityColor(_getSeverity(widget.stress)),
+                            statusColor:
+                                _getSeverityColor(_getSeverity(widget.stress)),
+                            progressColor:
+                                _getSeverityColor(_getSeverity(widget.stress)),
                           ),
                         ),
                       ],
@@ -273,7 +310,7 @@ class _ResultPageState extends State<ResultPage> {
                     Container(
                       padding: const EdgeInsets.all(32),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: const Color(0xFFF5F1EB),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: const Color(0xFFEEEEEE),
@@ -339,7 +376,16 @@ class _ResultPageState extends State<ResultPage> {
                           Row(
                             children: [
                               ElevatedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProgressPage(
+                                        session: widget.session,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(Icons.arrow_forward),
                                 label: const Text('View progress'),
                                 style: ElevatedButton.styleFrom(
@@ -356,7 +402,16 @@ class _ResultPageState extends State<ResultPage> {
                               ),
                               const SizedBox(width: 16),
                               OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AssessmentPage(
+                                        session: widget.session,
+                                      ),
+                                    ),
+                                  );
+                                },
                                 style: OutlinedButton.styleFrom(
                                   side: const BorderSide(
                                     color: Color(0xFFDDD5CE),
@@ -450,7 +505,7 @@ class _MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFF5F1EB),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: const Color(0xFFEEEEEE),

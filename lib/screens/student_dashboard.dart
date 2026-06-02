@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'result.dart';
 import 'assessment.dart';
+import 'progress.dart';
+import 'student_session.dart';
 
 class StudentDashboard extends StatefulWidget {
-  const StudentDashboard({Key? key}) : super(key: key);
+  final StudentSession? session;
+
+  const StudentDashboard({Key? key, this.session}) : super(key: key);
 
   @override
   State<StudentDashboard> createState() => _StudentDashboardState();
@@ -11,6 +15,22 @@ class StudentDashboard extends StatefulWidget {
 
 class _StudentDashboardState extends State<StudentDashboard> {
   String _selectedNav = 'Dashboard';
+
+  String get _studentName {
+    final name = widget.session?.name.trim();
+    return name == null || name.isEmpty ? 'Student' : name;
+  }
+
+  String get _matricNumber {
+    final matricNumber = widget.session?.matricNumber.trim();
+    return matricNumber == null || matricNumber.isEmpty ? 'S001' : matricNumber;
+  }
+
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +115,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const AssessmentPage(),
+                              builder: (context) => AssessmentPage(
+                                session: widget.session,
+                              ),
                             ),
                           );
                         },
@@ -108,7 +130,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ResultPage(),
+                              builder: (context) => ResultPage(
+                                session: widget.session,
+                              ),
                             ),
                           );
                         },
@@ -118,9 +142,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         label: 'Progress',
                         isActive: _selectedNav == 'Progress',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Progress';
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressPage(
+                                session: widget.session,
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(width: 60),
@@ -148,8 +177,18 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                 ),
                               ),
                             ),
+                            DropdownMenuItem(
+                              value: 'logout',
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
                           ],
-                          onChanged: null,
+                          onChanged: _handleAccountAction,
                           style: const TextStyle(
                             fontSize: 12,
                             color: Color(0xFF1A1A1A),
@@ -165,7 +204,8 @@ class _StudentDashboardState extends State<StudentDashboard> {
             // Main Content
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -183,19 +223,28 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hello, S001.',
-                              style: TextStyle(
+                              'Hello, $_studentName.',
+                              style: const TextStyle(
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF1A1A1A),
                               ),
                             ),
-                            SizedBox(height: 12),
+                            const SizedBox(height: 6),
                             Text(
+                              _matricNumber,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF354B0E),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
                               'Take a few quiet minutes to check in. Your answers are private and\nonly inform your personal recommendations.',
                               style: TextStyle(
                                 fontSize: 15,
@@ -211,7 +260,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const AssessmentPage(),
+                                builder: (context) => AssessmentPage(
+                                  session: widget.session,
+                                ),
                               ),
                             );
                           },
@@ -245,7 +296,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AssessmentPage(),
+                                  builder: (context) => AssessmentPage(
+                                    session: widget.session,
+                                  ),
                                 ),
                               );
                             },
@@ -261,7 +314,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const ResultPage(),
+                                  builder: (context) => ResultPage(
+                                    session: widget.session,
+                                  ),
                                 ),
                               );
                             },
@@ -273,7 +328,16 @@ class _StudentDashboardState extends State<StudentDashboard> {
                             icon: Icons.show_chart,
                             title: 'Progress',
                             subtitle: '3 assessments on record',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProgressPage(
+                                    session: widget.session,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],
