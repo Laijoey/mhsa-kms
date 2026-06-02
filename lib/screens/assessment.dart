@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'student_dashboard.dart';
 import 'result.dart';
+import 'progress.dart';
+import 'student_session.dart';
 
 class AssessmentPage extends StatefulWidget {
-  const AssessmentPage({Key? key}) : super(key: key);
+  final StudentSession? session;
+
+  const AssessmentPage({Key? key, this.session}) : super(key: key);
 
   @override
   State<AssessmentPage> createState() => _AssessmentPageState();
@@ -59,6 +63,12 @@ class _AssessmentPageState extends State<AssessmentPage> {
       .entries
       .every((e) => answers[currentPage * perPage + e.key] != null);
 
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+
   void submitAssessment() {
     // Calculate scores
     int depression = 0, anxiety = 0, stress = 0;
@@ -80,6 +90,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
           depression: depression,
           anxiety: anxiety,
           stress: stress,
+          session: widget.session,
         ),
       ),
     );
@@ -158,7 +169,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const StudentDashboard(),
+                              builder: (context) => StudentDashboard(
+                                session: widget.session,
+                              ),
                             ),
                           );
                         },
@@ -181,7 +194,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ResultPage(),
+                              builder: (context) => ResultPage(
+                                session: widget.session,
+                              ),
                             ),
                           );
                         },
@@ -191,9 +206,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         label: 'Progress',
                         isActive: _selectedNav == 'Progress',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Progress';
-                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressPage(
+                                session: widget.session,
+                              ),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(width: 60),
@@ -221,8 +241,18 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                 ),
                               ),
                             ),
+                            DropdownMenuItem(
+                              value: 'logout',
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
                           ],
-                          onChanged: null,
+                          onChanged: _handleAccountAction,
                           style: const TextStyle(
                             fontSize: 12,
                             color: Color(0xFF1A1A1A),
@@ -497,8 +527,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        const StudentDashboard(),
+                                    builder: (context) => StudentDashboard(
+                                      session: widget.session,
+                                    ),
                                   ),
                                 );
                               },
