@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'student_dashboard.dart';
 import 'assessment.dart';
 import 'result.dart';
 import 'student_session.dart';
@@ -119,14 +118,7 @@ class _ProgressPageState extends State<ProgressPage> {
                         label: 'Dashboard',
                         isActive: _selectedNav == 'Dashboard',
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StudentDashboard(
-                                session: widget.session,
-                              ),
-                            ),
-                          );
+                          Navigator.pop(context);
                         },
                       ),
                       const SizedBox(width: 30),
@@ -134,12 +126,14 @@ class _ProgressPageState extends State<ProgressPage> {
                         label: 'Assessment',
                         isActive: _selectedNav == 'Assessment',
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => AssessmentPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => AssessmentPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -149,12 +143,14 @@ class _ProgressPageState extends State<ProgressPage> {
                         label: 'Result',
                         isActive: _selectedNav == 'Result',
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ResultPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ResultPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'student_dashboard.dart';
 import 'assessment.dart';
 import 'progress.dart';
 import 'student_session.dart';
@@ -61,386 +60,389 @@ class _ResultPageState extends State<ResultPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Header
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF5EFE7),
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Color(0xFFE0E0E0),
-                      width: 1,
-                    ),
+        child: Column(
+          children: [
+            // Header
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5EFE7),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Logo and Title
-                    Row(
-                      children: [
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF354B0E),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.eco,
-                            color: Colors.white,
-                            size: 24,
-                          ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Logo and Title
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF354B0E),
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'MHSA-KMS',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A1A1A),
+                        child: const Icon(
+                          Icons.eco,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'MHSA-KMS',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                          Text(
+                            'MENTAL HEALTH KNOWLEDGE SYSTEM',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Color(0xFF999999),
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  // Navigation and Dropdown
+                  Row(
+                    children: [
+                      _NavButton(
+                        label: 'Dashboard',
+                        isActive: _selectedNav == 'Dashboard',
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Assessment',
+                        isActive: _selectedNav == 'Assessment',
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => AssessmentPage(
+                                session: widget.session,
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Result',
+                        isActive: _selectedNav == 'Result',
+                        onTap: () {
+                          setState(() {
+                            _selectedNav = 'Result';
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 30),
+                      _NavButton(
+                        label: 'Progress',
+                        isActive: _selectedNav == 'Progress',
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ProgressPage(
+                                session: widget.session,
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 60),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 1,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: const Color(0xFFDDD5CE)),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: DropdownButton<String>(
+                          value: 'Student',
+                          underline: const SizedBox(),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Student',
+                              child: Text(
+                                'Student',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
                               ),
                             ),
-                            Text(
-                              'MENTAL HEALTH KNOWLEDGE SYSTEM',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Color(0xFF999999),
-                                letterSpacing: 0.5,
+                            DropdownMenuItem(
+                              value: 'logout',
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
+                          ],
+                          onChanged: _handleAccountAction,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            // Content
+            Expanded(
+              child: SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1220),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Result Title Section
+                        const Text(
+                          'YOUR RESULT',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF999999),
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        const Text(
+                          'A snapshot of your past week.',
+                          style: TextStyle(
+                            fontFamily: 'serif',
+                            fontSize: 48,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1A1A1A),
+                            height: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Taken 5/17/2026, 12:36:10 PM',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF999999),
+                          ),
+                        ),
+                        const SizedBox(height: 40),
+                        // Metrics Cards
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _MetricCard(
+                                label: 'DEPRESSION',
+                                score: '${widget.depression}',
+                                maxScore: '42',
+                                status: _getSeverity(widget.depression),
+                                statusColor: _getSeverityColor(
+                                    _getSeverity(widget.depression)),
+                                progressColor: _getSeverityColor(
+                                    _getSeverity(widget.depression)),
+                              ),
+                            ),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: _MetricCard(
+                                label: 'ANXIETY',
+                                score: '${widget.anxiety}',
+                                maxScore: '42',
+                                status: _getSeverity(widget.anxiety),
+                                statusColor: _getSeverityColor(
+                                    _getSeverity(widget.anxiety)),
+                                progressColor: _getSeverityColor(
+                                    _getSeverity(widget.anxiety)),
+                              ),
+                            ),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: _MetricCard(
+                                label: 'STRESS',
+                                score: '${widget.stress}',
+                                maxScore: '42',
+                                status: _getSeverity(widget.stress),
+                                statusColor: _getSeverityColor(
+                                    _getSeverity(widget.stress)),
+                                progressColor: _getSeverityColor(
+                                    _getSeverity(widget.stress)),
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-
-                    // Navigation and Dropdown
-                    Row(
-                      children: [
-                        _NavButton(
-                          label: 'Dashboard',
-                          isActive: _selectedNav == 'Dashboard',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StudentDashboard(
-                                  session: widget.session,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 30),
-                        _NavButton(
-                          label: 'Assessment',
-                          isActive: _selectedNav == 'Assessment',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AssessmentPage(
-                                  session: widget.session,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 30),
-                        _NavButton(
-                          label: 'Result',
-                          isActive: _selectedNav == 'Result',
-                          onTap: () {
-                            setState(() {
-                              _selectedNav = 'Result';
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 30),
-                        _NavButton(
-                          label: 'Progress',
-                          isActive: _selectedNav == 'Progress',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProgressPage(
-                                  session: widget.session,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 60),
+                        const SizedBox(height: 40),
+                        // Recommendation Section
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 1,
-                          ),
+                          padding: const EdgeInsets.all(32),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFDDD5CE)),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: DropdownButton<String>(
-                            value: 'Student',
-                            underline: const SizedBox(),
-                            items: const [
-                              DropdownMenuItem(
-                                value: 'Student',
-                                child: Text(
-                                  'Student',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF1A1A1A),
-                                  ),
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: 'logout',
-                                child: Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xFF1A1A1A),
-                                  ),
-                                ),
-                              ),
-                            ],
-                            onChanged: _handleAccountAction,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF1A1A1A),
+                            color: const Color(0xFFF5F1EB),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: const Color(0xFFBFB8AD),
+                              width: 1,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              // Content
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Result Title Section
-                    const Text(
-                      'YOUR RESULT',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF999999),
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    const Text(
-                      'A snapshot of your past week.',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
-                        height: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Taken 5/17/2026, 12:36:10 PM',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF999999),
-                      ),
-                    ),
-                    const SizedBox(height: 40),
-                    // Metrics Cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _MetricCard(
-                            label: 'DEPRESSION',
-                            score: '${widget.depression}',
-                            maxScore: '42',
-                            status: _getSeverity(widget.depression),
-                            statusColor: _getSeverityColor(
-                                _getSeverity(widget.depression)),
-                            progressColor: _getSeverityColor(
-                                _getSeverity(widget.depression)),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _MetricCard(
-                            label: 'ANXIETY',
-                            score: '${widget.anxiety}',
-                            maxScore: '42',
-                            status: _getSeverity(widget.anxiety),
-                            statusColor:
-                                _getSeverityColor(_getSeverity(widget.anxiety)),
-                            progressColor:
-                                _getSeverityColor(_getSeverity(widget.anxiety)),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _MetricCard(
-                            label: 'STRESS',
-                            score: '${widget.stress}',
-                            maxScore: '42',
-                            status: _getSeverity(widget.stress),
-                            statusColor:
-                                _getSeverityColor(_getSeverity(widget.stress)),
-                            progressColor:
-                                _getSeverityColor(_getSeverity(widget.stress)),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    // Recommendation Section
-                    Container(
-                      padding: const EdgeInsets.all(32),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F1EB),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: const Color(0xFFEEEEEE),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    '✨ Personalised recommendation',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFEBEE),
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                        color: const Color(0xFFD32F2F),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Severe',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFD32F2F),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
                               const Text(
-                                '✨ Personalised recommendation',
+                                'Generated by expert rule R4 — Severe severity in any subscale.',
                                 style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
+                                  fontSize: 14,
+                                  color: Color(0xFF666666),
                                 ),
                               ),
-                              const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Recommended counselling referral. Schedule a 1:1 session within 7 days. Provide emergency contact card.',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF333333),
+                                  height: 1.6,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFEBEE),
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: const Color(0xFFD32F2F),
-                                    width: 1,
+                              ),
+                              const SizedBox(height: 24),
+                              Row(
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProgressPage(
+                                            session: widget.session,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.arrow_forward),
+                                    label: const Text('View progress'),
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF354B0E),
+                                      foregroundColor: Colors.white,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                        vertical: 12,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(32),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                child: const Text(
-                                  'Severe',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFFD32F2F),
+                                  const SizedBox(width: 16),
+                                  OutlinedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AssessmentPage(
+                                            session: widget.session,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      side: const BorderSide(
+                                        color: Color(0xFFDDD5CE),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 24,
+                                        vertical: 12,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(32),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      'Re-take assessment',
+                                      style: TextStyle(
+                                        color: Color(0xFF1A1A1A),
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Generated by expert rule R4 — Severe severity in any subscale.',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF666666),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          const Text(
-                            'Recommended counselling referral. Schedule a 1:1 session within 7 days. Provide emergency contact card.',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color(0xFF333333),
-                              height: 1.6,
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                          Row(
-                            children: [
-                              ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProgressPage(
-                                        session: widget.session,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.arrow_forward),
-                                label: const Text('View progress'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF354B0E),
-                                  foregroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              OutlinedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AssessmentPage(
-                                        session: widget.session,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                style: OutlinedButton.styleFrom(
-                                  side: const BorderSide(
-                                    color: Color(0xFFDDD5CE),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 24,
-                                    vertical: 12,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Re-take assessment',
-                                  style: TextStyle(
-                                    color: Color(0xFF1A1A1A),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -508,7 +510,7 @@ class _MetricCard extends StatelessWidget {
         color: const Color(0xFFF5F1EB),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: const Color(0xFFEEEEEE),
+          color: const Color(0xFFBFB8AD),
           width: 1,
         ),
       ),

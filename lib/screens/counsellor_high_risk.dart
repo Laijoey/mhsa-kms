@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'knowledge_base.dart';
 
 class CounsellorHighRisk extends StatefulWidget {
   const CounsellorHighRisk({Key? key}) : super(key: key);
@@ -10,10 +11,16 @@ class CounsellorHighRisk extends StatefulWidget {
 class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
   String _selectedNav = 'HighRisk';
 
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+
   // High-risk students data
   final List<Map<String, dynamic>> highRiskStudents = [
     {
-      'name': 'Jane Smith',
+      'name': 'Priya Raman',
       'id': 'S002',
       'severity': 'Extremely Severe',
       'date': '5/16/2026',
@@ -23,7 +30,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
       'recommendation': 'Immediate referral to campus health center recommended.',
     },
     {
-      'name': 'John Doe',
+      'name': 'Aiman Tan',
       'id': 'S001',
       'severity': 'Severe',
       'date': '5/17/2026',
@@ -43,8 +50,16 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5EFE7),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -96,25 +111,37 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                         isActive: _selectedNav == 'Dashboard',
                         onTap: () => Navigator.pop(context),
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'High Risk',
                         isActive: _selectedNav == 'HighRisk',
                         onTap: () {},
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Knowledge Base',
                         isActive: _selectedNav == 'Knowledge',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => const KnowledgeBasePage(
+                                userRole: 'counsellor',
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
                       ),
-                      const SizedBox(width: 100),
+                      const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: 8,
+                          vertical: 1,
                         ),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(color: const Color(0xFFDDD5CE)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -132,8 +159,22 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                                 ),
                               ),
                             ),
+                            DropdownMenuItem(
+                              value: 'logout',
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
                           ],
-                          onChanged: null,
+                          onChanged: _handleAccountAction,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1A1A1A),
+                          ),
                         ),
                       ),
                     ],
@@ -141,7 +182,6 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                 ],
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFEEEEEE)),
 
             // Content
             Expanded(
@@ -230,25 +270,30 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                     ...highRiskStudents.map((student) {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 20),
-                        padding: const EdgeInsets.all(24),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: const Color(0xFFF5F1EB),
                           borderRadius: BorderRadius.circular(12),
-                          border: Border(
-                            left: BorderSide(
-                              color: student['severity'] == 'Extremely Severe'
-                                  ? const Color(0xFF7B1FA2)
-                                  : const Color(0xFFD32F2F),
-                              width: 4,
-                            ),
-                            top: const BorderSide(color: Color(0xFFE8E8E8)),
-                            right: const BorderSide(color: Color(0xFFE8E8E8)),
-                            bottom: const BorderSide(color: Color(0xFFE8E8E8)),
-                          ),
+                          border: Border.all(color: const Color(0xFFBFB8AD)),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        clipBehavior: Clip.antiAlias,
+                        child: Stack(
                           children: [
+                            Positioned(
+                              left: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: Container(
+                                width: 4,
+                                color: student['severity'] == 'Extremely Severe'
+                                    ? const Color(0xFF7B1FA2)
+                                    : const Color(0xFFD32F2F),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(24),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                             // Header
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -401,7 +446,10 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                             ),
                           ],
                         ),
-                      );
+                      ),
+                    ],
+                  ),
+                );
                     }).toList(),
                   ],
                 ),
@@ -429,28 +477,20 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
           ),
-          const SizedBox(height: 8),
-          if (isActive)
-            Container(
-              width: 40,
-              height: 3,
-              decoration: BoxDecoration(
-                color: const Color(0xFF354B0E),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

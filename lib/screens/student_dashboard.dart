@@ -114,10 +114,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => AssessmentPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => AssessmentPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -129,10 +131,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ResultPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ResultPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -144,10 +148,12 @@ class _StudentDashboardState extends State<StudentDashboard> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ProgressPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ProgressPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -205,219 +211,225 @@ class _StudentDashboardState extends State<StudentDashboard> {
             Expanded(
               child: SingleChildScrollView(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 40),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Greeting Section
-                    const Text(
-                      'STUDENT',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF999999),
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1220),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        // Greeting Section
+                        const Text(
+                          'STUDENT',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF999999),
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Hello, $_studentName.',
-                              style: const TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A1A1A),
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Hello, $_studentName.',
+                                  style: const TextStyle(
+                                    fontFamily: 'serif',
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  _matricNumber,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF354B0E),
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                const Text(
+                                  'Take a few quiet minutes to check in. Your answers are private and\nonly inform your personal recommendations.',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xFF666666),
+                                    height: 1.6,
+                                  ),
+                                  maxLines: 2,
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 6),
-                            Text(
-                              _matricNumber,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF354B0E),
+                            ElevatedButton.icon(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AssessmentPage(
+                                      session: widget.session,
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: const Icon(Icons.arrow_forward),
+                              label: const Text('New assessment'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF354B0E),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            const Text(
-                              'Take a few quiet minutes to check in. Your answers are private and\nonly inform your personal recommendations.',
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Color(0xFF666666),
-                                height: 1.6,
-                              ),
-                              maxLines: 2,
                             ),
                           ],
                         ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AssessmentPage(
-                                  session: widget.session,
-                                ),
+                        const SizedBox(height: 40),
+
+                        // Three Cards
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _DashboardCard(
+                                icon: Icons.assignment,
+                                title: 'Self-Assessment',
+                                subtitle: '21 short questions · ~5 minutes',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AssessmentPage(
+                                        session: widget.session,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                          icon: const Icon(Icons.arrow_forward),
-                          label: const Text('New assessment'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF354B0E),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 16,
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: _DashboardCard(
+                                icon: Icons.trending_up,
+                                title: 'Latest Result',
+                                subtitle: 'Overall: Severe',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ResultPage(
+                                        session: widget.session,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: _DashboardCard(
+                                icon: Icons.show_chart,
+                                title: 'Progress',
+                                subtitle: '3 assessments on record',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProgressPage(
+                                        session: widget.session,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+
+                        // Latest Snapshot Section
+                        Container(
+                          padding: const EdgeInsets.all(28),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F1EB),
+                            border: Border.all(color: const Color(0xFFBFB8AD)),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'Latest snapshot',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFEBEE),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Text(
+                                      'Severe',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                        color: Color(0xFFD32F2F),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 40),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: _MetricCard(
+                                      label: 'DEPRESSION',
+                                      value: '18',
+                                      status: 'Moderate',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  Expanded(
+                                    child: _MetricCard(
+                                      label: 'ANXIETY',
+                                      value: '16',
+                                      status: 'Severe',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 24),
+                                  Expanded(
+                                    child: _MetricCard(
+                                      label: 'STRESS',
+                                      value: '24',
+                                      status: 'Moderate',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 40),
-
-                    // Three Cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _DashboardCard(
-                            icon: Icons.assignment,
-                            title: 'Self-Assessment',
-                            subtitle: '21 short questions · ~5 minutes',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AssessmentPage(
-                                    session: widget.session,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _DashboardCard(
-                            icon: Icons.trending_up,
-                            title: 'Latest Result',
-                            subtitle: 'Overall: Severe',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ResultPage(
-                                    session: widget.session,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _DashboardCard(
-                            icon: Icons.show_chart,
-                            title: 'Progress',
-                            subtitle: '3 assessments on record',
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProgressPage(
-                                    session: widget.session,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-
-                    // Latest Snapshot Section
-                    Container(
-                      padding: const EdgeInsets.all(28),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF5F1EB),
-                        border: Border.all(color: const Color(0xFFBFB8AD)),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Latest snapshot',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1A1A1A),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFFEBEE),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const Text(
-                                  'Severe',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xFFD32F2F),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 40),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _MetricCard(
-                                  label: 'DEPRESSION',
-                                  value: '18',
-                                  status: 'Moderate',
-                                ),
-                              ),
-                              const SizedBox(width: 24),
-                              Expanded(
-                                child: _MetricCard(
-                                  label: 'ANXIETY',
-                                  value: '16',
-                                  status: 'Severe',
-                                ),
-                              ),
-                              const SizedBox(width: 24),
-                              Expanded(
-                                child: _MetricCard(
-                                  label: 'STRESS',
-                                  value: '24',
-                                  status: 'Moderate',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
