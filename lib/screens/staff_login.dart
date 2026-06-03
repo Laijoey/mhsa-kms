@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
-import 'student_dashboard.dart';
-import 'student_session.dart';
+import 'counsellor_dashboard.dart';
+import 'admin_dashboard.dart';
 
-class StudentLoginPage extends StatefulWidget {
-  const StudentLoginPage({Key? key}) : super(key: key);
+class StaffLoginPage extends StatefulWidget {
+  final String role; // 'counsellor' or 'admin'
+
+  const StaffLoginPage({
+    Key? key,
+    required this.role,
+  }) : super(key: key);
 
   @override
-  State<StudentLoginPage> createState() => _StudentLoginPageState();
+  State<StaffLoginPage> createState() => _StaffLoginPageState();
 }
 
-class _StudentLoginPageState extends State<StudentLoginPage> {
+class _StaffLoginPageState extends State<StaffLoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _matricController = TextEditingController();
+  final _staffIdController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _hidePassword = true;
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _matricController.dispose();
+    _staffIdController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -27,15 +30,13 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
   void _login() {
     if (!_formKey.currentState!.validate()) return;
 
+    // Direct to the corresponding dashboard upon validation
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => StudentDashboard(
-          session: StudentSession(
-            name: _nameController.text.trim(),
-            matricNumber: _matricController.text.trim(),
-          ),
-        ),
+        builder: (context) => widget.role == 'admin'
+            ? const AdminDashboard()
+            : const CounsellorDashboard(),
       ),
     );
   }
@@ -49,6 +50,10 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isAdmin = widget.role == 'admin';
+    final String roleTitle = isAdmin ? 'Admin Login' : 'Counsellor Login';
+    final IconData roleIcon = isAdmin ? Icons.admin_panel_settings : Icons.health_and_safety;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5EFE7),
       body: SafeArea(
@@ -126,27 +131,27 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
                                   color: const Color(0xFF354B0E),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: const Icon(
-                                  Icons.school,
+                                child: Icon(
+                                  roleIcon,
                                   color: Colors.white,
                                   size: 22,
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Student Login',
-                                    style: TextStyle(
+                                    roleTitle,
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF1A1A1A),
                                     ),
                                   ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'MHSA-KMS',
+                                  const SizedBox(height: 2),
+                                  const Text(
+                                    'MHSA-KMS Staff Portal',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Color(0xFF777777),
@@ -158,26 +163,14 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
                           ),
                           const SizedBox(height: 28),
                           TextFormField(
-                            controller: _nameController,
+                            controller: _staffIdController,
                             textInputAction: TextInputAction.next,
                             decoration: const InputDecoration(
-                              labelText: 'Name',
-                              prefixIcon: Icon(Icons.person_outline),
-                              border: OutlineInputBorder(),
-                            ),
-                            validator: (value) => _requiredField(value, 'Name'),
-                          ),
-                          const SizedBox(height: 16),
-                          TextFormField(
-                            controller: _matricController,
-                            textInputAction: TextInputAction.next,
-                            decoration: const InputDecoration(
-                              labelText: 'Matric number',
+                              labelText: 'Staff ID',
                               prefixIcon: Icon(Icons.badge_outlined),
                               border: OutlineInputBorder(),
                             ),
-                            validator: (value) =>
-                                _requiredField(value, 'Matric number'),
+                            validator: (value) => _requiredField(value, 'Staff ID'),
                           ),
                           const SizedBox(height: 16),
                           TextFormField(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'counsellor_high_risk.dart';
+import 'knowledge_base.dart';
 
 class CounsellorDashboard extends StatefulWidget {
   const CounsellorDashboard({Key? key}) : super(key: key);
@@ -10,41 +12,29 @@ class CounsellorDashboard extends StatefulWidget {
 class _CounsellorDashboardState extends State<CounsellorDashboard> {
   String _selectedNav = 'Dashboard';
 
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+
   // Sample flagged students data
   final List<Map<String, dynamic>> flaggedStudents = [
     {
-      'name': 'John Doe',
+      'name': 'Aiman Tan',
       'id': 'S001',
       'severity': 'Severe',
       'date': '5/17/2026',
       'scores': {'depression': 24, 'anxiety': 20, 'stress': 28},
     },
     {
-      'name': 'Jane Smith',
+      'name': 'Priya Raman',
       'id': 'S002',
       'severity': 'Extremely Severe',
       'date': '5/16/2026',
       'scores': {'depression': 28, 'anxiety': 26, 'stress': 32},
     },
-    {
-      'name': 'Mike Johnson',
-      'id': 'S003',
-      'severity': 'Severe',
-      'date': '5/15/2026',
-      'scores': {'depression': 22, 'anxiety': 18, 'stress': 26},
-    },
   ];
-
-  Color _getSeverityColor(String severity) {
-    switch (severity) {
-      case 'Severe':
-        return const Color(0xFFD32F2F);
-      case 'Extremely Severe':
-        return const Color(0xFF7B1FA2);
-      default:
-        return const Color(0xFFF57C00);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +45,16 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5EFE7),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Color(0xFFE0E0E0),
+                    width: 1,
+                  ),
+                ),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -112,33 +110,46 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                           });
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'High Risk',
                         isActive: _selectedNav == 'HighRisk',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'HighRisk';
-                          });
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => const CounsellorHighRisk(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 40),
+                      const SizedBox(width: 30),
                       _NavButton(
                         label: 'Knowledge Base',
                         isActive: _selectedNav == 'Knowledge',
                         onTap: () {
-                          setState(() {
-                            _selectedNav = 'Knowledge';
-                          });
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => const KnowledgeBasePage(
+                                userRole: 'counsellor',
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(width: 100),
+                      const SizedBox(width: 60),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: 8,
+                          vertical: 1,
                         ),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(color: const Color(0xFFDDD5CE)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -156,8 +167,22 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                                 ),
                               ),
                             ),
+                            DropdownMenuItem(
+                              value: 'logout',
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ),
                           ],
-                          onChanged: null,
+                          onChanged: _handleAccountAction,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF1A1A1A),
+                          ),
                         ),
                       ),
                     ],
@@ -165,7 +190,6 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                 ],
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFEEEEEE)),
 
             // Content
             Expanded(
@@ -186,8 +210,9 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                     ),
                     const SizedBox(height: 12),
                     const Text(
-                      'Monitor & Support Student Wellbeing',
+                      'Cohort overview.',
                       style: TextStyle(
+                        fontFamily: 'serif',
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF1A1A1A),
@@ -195,7 +220,7 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'Review recent assessments, identify at-risk students, and access expert recommendations for interventions.',
+                      'Latest assessment per student, severity distribution, and students currently flagged for follow-up.',
                       style: TextStyle(
                         fontSize: 14,
                         color: Color(0xFF666666),
@@ -209,119 +234,194 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                       children: [
                         Expanded(
                           child: _StatCard(
-                            label: 'Total Students',
-                            value: '${128}',
-                            icon: Icons.people,
+                            label: 'Students tracked',
+                            value: '8',
+                            icon: Icons.people_outline,
+                            iconBgColor: const Color(0xFFE2EBE2),
+                            iconColor: const Color(0xFF354B0E),
                           ),
                         ),
                         const SizedBox(width: 24),
                         Expanded(
                           child: _StatCard(
-                            label: 'Flagged This Week',
-                            value: '${flaggedStudents.length}',
-                            icon: Icons.warning,
-                            isAlert: true,
+                            label: 'High-risk',
+                            value: '8',
+                            icon: Icons.warning_amber_rounded,
+                            iconBgColor: const Color(0xFFFDE8E8),
+                            iconColor: const Color(0xFFD32F2F),
                           ),
                         ),
                         const SizedBox(width: 24),
                         Expanded(
                           child: _StatCard(
-                            label: 'Assessments',
-                            value: '${342}',
-                            icon: Icons.assignment,
+                            label: 'Avg Depression',
+                            value: '23',
+                            icon: Icons.show_chart,
+                            iconBgColor: const Color(0xFFE2EBE2),
+                            iconColor: const Color(0xFF354B0E),
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Expanded(
+                          child: _StatCard(
+                            label: 'Avg Anxiety',
+                            value: '23',
+                            icon: Icons.show_chart,
+                            iconBgColor: const Color(0xFFE2EBE2),
+                            iconColor: const Color(0xFF354B0E),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 40),
 
-                    // Flagged Students Section
-                    const Text(
-                      'Recently Flagged Students',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF1A1A1A),
-                      ),
+                    // Two-Column Content
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Left Column: Severity Distribution
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            padding: const EdgeInsets.all(28),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF5F1EB),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFFBFB8AD)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Severity distribution',
+                                  style: TextStyle(
+                                    fontFamily: 'serif',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+                                _SeverityRow(
+                                  label: 'Normal',
+                                  value: 0.0,
+                                  color: const Color(0xFFE2EBE2),
+                                  textColor: const Color(0xFF354B0E),
+                                ),
+                                const SizedBox(height: 16),
+                                _SeverityRow(
+                                  label: 'Mild',
+                                  value: 0.0,
+                                  color: const Color(0xFFE2EBE2),
+                                  textColor: const Color(0xFF354B0E),
+                                ),
+                                const SizedBox(height: 16),
+                                _SeverityRow(
+                                  label: 'Moderate',
+                                  value: 0.0,
+                                  color: const Color(0xFFFFF3E0),
+                                  textColor: const Color(0xFFEF6C00),
+                                ),
+                                const SizedBox(height: 16),
+                                _SeverityRow(
+                                  label: 'Severe',
+                                  value: 0.0,
+                                  color: const Color(0xFFFFEBEE),
+                                  textColor: const Color(0xFFD32F2F),
+                                ),
+                                const SizedBox(height: 16),
+                                _SeverityRow(
+                                  label: 'Extremely Severe',
+                                  value: 0.0,
+                                  color: const Color(0xFFF3E5F5),
+                                  textColor: const Color(0xFF7B1FA2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        // Right Column: High-risk students
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            padding: const EdgeInsets.all(28),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF5F1EB),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: const Color(0xFFBFB8AD)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'High-risk students',
+                                      style: TextStyle(
+                                        fontFamily: 'serif',
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF1A1A1A),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder: (context, anim1, anim2) => const CounsellorHighRisk(),
+                                            transitionDuration: Duration.zero,
+                                            reverseTransitionDuration: Duration.zero,
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        children: const [
+                                          Text(
+                                            'View all',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xFF666666),
+                                            ),
+                                          ),
+                                          SizedBox(width: 4),
+                                          Icon(
+                                            Icons.arrow_forward,
+                                            size: 14,
+                                            color: Color(0xFF666666),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 24),
+                                _HighRiskStudentItem(
+                                  name: 'Aiman Tan',
+                                  id: 'S001',
+                                  course: 'BSc Computer Science',
+                                  severity: 'Severe',
+                                  severityColor: const Color(0xFFD32F2F),
+                                  severityBgColor: const Color(0xFFFFEBEE),
+                                ),
+                                const SizedBox(height: 12),
+                                _HighRiskStudentItem(
+                                  name: 'Priya Raman',
+                                  id: 'S002',
+                                  course: 'BA Psychology',
+                                  severity: 'Extremely Severe',
+                                  severityColor: const Color(0xFF7B1FA2),
+                                  severityBgColor: const Color(0xFFF3E5F5),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    ...flaggedStudents.map((student) {
-                      return Container(
-                        margin: const EdgeInsets.only(bottom: 16),
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFE8E8E8)),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF0F0F0),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.person, color: Color(0xFF354B0E)),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    student['name'],
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xFF1A1A1A),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'ID: ${student['id']} · Assessed: ${student['date']}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFF999999),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 6,
-                              ),
-                              decoration: BoxDecoration(
-                                color: _getSeverityColor(student['severity']).withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: _getSeverityColor(student['severity']),
-                                ),
-                              ),
-                              child: Text(
-                                student['severity'],
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: _getSeverityColor(student['severity']),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Icon(
-                              Icons.arrow_forward,
-                              color: const Color(0xFF354B0E),
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
                   ],
                 ),
               ),
@@ -348,28 +448,20 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
           ),
-          const SizedBox(height: 8),
-          if (isActive)
-            Container(
-              width: 40,
-              height: 3,
-              decoration: BoxDecoration(
-                color: const Color(0xFF354B0E),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }
@@ -379,50 +471,205 @@ class _StatCard extends StatelessWidget {
   final String label;
   final String value;
   final IconData icon;
-  final bool isAlert;
+  final Color iconBgColor;
+  final Color iconColor;
 
   const _StatCard({
     required this.label,
     required this.value,
     required this.icon,
-    this.isAlert = false,
+    required this.iconBgColor,
+    required this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFFF5F1EB),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isAlert ? const Color(0xFFD32F2F).withOpacity(0.3) : const Color(0xFFE8E8E8),
+          color: const Color(0xFFBFB8AD),
+          width: 1,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            icon,
-            color: isAlert ? const Color(0xFFD32F2F) : const Color(0xFF354B0E),
-            size: 28,
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: iconBgColor,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              color: iconColor,
+              size: 20,
+            ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
+          Text(
+            value,
+            style: const TextStyle(
+              fontFamily: 'serif',
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1A1A1A),
+            ),
+          ),
+          const SizedBox(height: 4),
           Text(
             label,
             style: const TextStyle(
               fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               color: Color(0xFF999999),
             ),
           ),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF1A1A1A),
+        ],
+      ),
+    );
+  }
+}
+
+class _SeverityRow extends StatelessWidget {
+  final String label;
+  final double value; // between 0.0 and 1.0
+  final Color color; // badge background
+  final Color textColor; // badge text color
+
+  const _SeverityRow({
+    required this.label,
+    required this.value,
+    required this.color,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 130,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: textColor,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Container(
+            height: 8,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE2EBE2),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: value,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: textColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Text(
+          '${(value * 100).toStringAsFixed(1)}%',
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF666666),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HighRiskStudentItem extends StatelessWidget {
+  final String name;
+  final String id;
+  final String course;
+  final String severity;
+  final Color severityColor;
+  final Color severityBgColor;
+
+  const _HighRiskStudentItem({
+    required this.name,
+    required this.id,
+    required this.course,
+    required this.severity,
+    required this.severityColor,
+    required this.severityBgColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F1EB),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFBFB8AD)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '$id · $course',
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFF999999),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: severityBgColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: severityColor),
+            ),
+            child: Text(
+              severity,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: severityColor,
+              ),
             ),
           ),
         ],

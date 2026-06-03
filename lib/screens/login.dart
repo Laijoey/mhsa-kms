@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'student_login.dart';
-import 'counsellor_dashboard.dart';
-import 'admin_dashboard.dart';
+import 'staff_login.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -177,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                const CounsellorDashboard(),
+                                                const StaffLoginPage(role: 'counsellor'),
                                           ),
                                         );
                                       },
@@ -323,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const CounsellorDashboard(),
+                                                    const StaffLoginPage(role: 'counsellor'),
                                               ),
                                             );
                                           },
@@ -345,7 +344,7 @@ class _LoginPageState extends State<LoginPage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const AdminDashboard(),
+                                                    const StaffLoginPage(role: 'admin'),
                                               ),
                                             );
                                           },

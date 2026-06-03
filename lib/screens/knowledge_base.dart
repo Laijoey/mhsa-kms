@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'counsellor_high_risk.dart';
 
 class KnowledgeBasePage extends StatefulWidget {
   final String userRole; // 'counsellor' or 'admin'
@@ -11,6 +12,12 @@ class KnowledgeBasePage extends StatefulWidget {
 class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
   String _selectedNav = 'Knowledge';
   String _searchQuery = '';
+
+  void _handleAccountAction(String? value) {
+    if (value == 'logout') {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
 
   // Knowledge base resources
   final List<Map<String, dynamic>> resources = [
@@ -68,8 +75,22 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
           children: [
             // Header
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-              color: Colors.white,
+              padding: widget.userRole == 'counsellor'
+                  ? const EdgeInsets.symmetric(horizontal: 40, vertical: 12)
+                  : const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
+              decoration: widget.userRole == 'counsellor'
+                  ? const BoxDecoration(
+                      color: Color(0xFFF5EFE7),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Color(0xFFE0E0E0),
+                          width: 1,
+                        ),
+                      ),
+                    )
+                  : const BoxDecoration(
+                      color: Colors.white,
+                    ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -120,33 +141,52 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                         label: widget.userRole == 'counsellor' ? 'Dashboard' : 'Dashboard',
                         isActive: _selectedNav == 'Dashboard',
                         onTap: () => Navigator.pop(context),
+                        isPill: widget.userRole == 'counsellor',
                       ),
-                      const SizedBox(width: 40),
+                      SizedBox(width: widget.userRole == 'counsellor' ? 30 : 40),
                       if (widget.userRole == 'counsellor')
                         _NavButton(
                           label: 'High Risk',
                           isActive: _selectedNav == 'HighRisk',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, anim1, anim2) => const CounsellorHighRisk(),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ),
+                            );
+                          },
+                          isPill: true,
                         )
                       else
                         _NavButton(
                           label: 'Questions',
                           isActive: _selectedNav == 'Questions',
                           onTap: () {},
+                          isPill: false,
                         ),
-                      const SizedBox(width: 40),
+                      SizedBox(width: widget.userRole == 'counsellor' ? 30 : 40),
                       _NavButton(
                         label: 'Knowledge Base',
                         isActive: _selectedNav == 'Knowledge',
                         onTap: () {},
+                        isPill: widget.userRole == 'counsellor',
                       ),
-                      const SizedBox(width: 100),
+                      SizedBox(width: widget.userRole == 'counsellor' ? 60 : 100),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                        padding: widget.userRole == 'counsellor'
+                            ? const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 1,
+                              )
+                            : const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
                         decoration: BoxDecoration(
+                          color: widget.userRole == 'counsellor' ? Colors.white : null,
                           border: Border.all(color: const Color(0xFFDDD5CE)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -170,8 +210,27 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                                 ),
                               ),
                             ),
+                            if (widget.userRole == 'counsellor')
+                              const DropdownMenuItem(
+                                value: 'logout',
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                              ),
                           ],
-                          onChanged: null,
+                          onChanged: widget.userRole == 'counsellor'
+                              ? _handleAccountAction
+                              : null,
+                          style: widget.userRole == 'counsellor'
+                              ? const TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF1A1A1A),
+                                )
+                              : null,
                         ),
                       ),
                     ],
@@ -179,7 +238,8 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                 ],
               ),
             ),
-            const Divider(height: 1, color: Color(0xFFEEEEEE)),
+            if (widget.userRole != 'counsellor')
+              const Divider(height: 1, color: Color(0xFFEEEEEE)),
 
             // Content
             Expanded(
@@ -258,7 +318,16 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                     const SizedBox(height: 32),
 
                     // Resources List
-                    ...resources.map((resource) {
+                    ...resources.where((resource) {
+                      final title = resource['title']?.toString().toLowerCase() ?? '';
+                      final description = resource['description']?.toString().toLowerCase() ?? '';
+                      final category = resource['category']?.toString().toLowerCase() ?? '';
+                      final query = _searchQuery.toLowerCase();
+                      return query.isEmpty ||
+                          title.contains(query) ||
+                          description.contains(query) ||
+                          category.contains(query);
+                    }).map((resource) {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(20),
@@ -376,40 +445,58 @@ class _NavButton extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
+  final bool isPill;
 
   const _NavButton({
     required this.label,
     required this.isActive,
     required this.onTap,
+    this.isPill = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
-            ),
-          ),
-          const SizedBox(height: 8),
-          if (isActive)
-            Container(
-              width: 40,
-              height: 3,
+      child: isPill
+          ? Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF354B0E),
-                borderRadius: BorderRadius.circular(2),
+                color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
               ),
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                  color: isActive ? Colors.white : const Color(0xFF999999),
+                ),
+              ),
+            )
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (isActive)
+                  Container(
+                    width: 40,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF354B0E),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'student_dashboard.dart';
 import 'result.dart';
 import 'progress.dart';
 import 'student_session.dart';
@@ -166,14 +165,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         label: 'Dashboard',
                         isActive: _selectedNav == 'Dashboard',
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => StudentDashboard(
-                                session: widget.session,
-                              ),
-                            ),
-                          );
+                          Navigator.pop(context);
                         },
                       ),
                       const SizedBox(width: 30),
@@ -191,12 +183,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         label: 'Result',
                         isActive: _selectedNav == 'Result',
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ResultPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ResultPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -206,12 +200,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         label: 'Progress',
                         isActive: _selectedNav == 'Progress',
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ProgressPage(
+                            PageRouteBuilder(
+                              pageBuilder: (context, anim1, anim2) => ProgressPage(
                                 session: widget.session,
                               ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
                             ),
                           );
                         },
@@ -297,6 +293,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                   Text(
                                     'How have you been, over the past week?',
                                     style: TextStyle(
+                                      fontFamily: 'serif',
                                       fontSize: 32,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF1A1A1A),
@@ -524,14 +521,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => StudentDashboard(
-                                      session: widget.session,
-                                    ),
-                                  ),
-                                );
+                                Navigator.pop(context);
                               },
                               icon: const Icon(Icons.arrow_back),
                               label: const Text('Back'),
