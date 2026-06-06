@@ -139,69 +139,70 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 const SizedBox(height: 28),
 
-                                // Action Buttons
-                                Row(
-                                  children: [
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const StudentLoginPage(),
-                                          ),
-                                        );
-                                      },
-                                      icon: const Icon(Icons.arrow_forward),
-                                      label:
-                                          const Text('Start self-assessment'),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                            const Color(0xFF354B0E),
-                                        foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 24,
-                                          vertical: 12,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(32),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const StaffLoginPage(role: 'counsellor'),
-                                          ),
-                                        );
-                                      },
-                                      style: OutlinedButton.styleFrom(
-                                        side: const BorderSide(
-                                          color: Color(0xFFDDD5CE),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 24,
-                                          vertical: 12,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(32),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Counsellor view',
-                                        style: TextStyle(
-                                          color: Color(0xFF1A1A1A),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                 // Action Buttons
+                                 Wrap(
+                                   spacing: 20,
+                                   runSpacing: 12,
+                                   children: [
+                                     ElevatedButton.icon(
+                                       onPressed: () {
+                                         Navigator.push(
+                                           context,
+                                           MaterialPageRoute(
+                                             builder: (context) =>
+                                                 const StudentLoginPage(),
+                                           ),
+                                         );
+                                       },
+                                       icon: const Icon(Icons.arrow_forward),
+                                       label:
+                                           const Text('Start self-assessment'),
+                                       style: ElevatedButton.styleFrom(
+                                         backgroundColor:
+                                             const Color(0xFF354B0E),
+                                         foregroundColor: Colors.white,
+                                         padding: const EdgeInsets.symmetric(
+                                           horizontal: 24,
+                                           vertical: 12,
+                                         ),
+                                         shape: RoundedRectangleBorder(
+                                           borderRadius:
+                                               BorderRadius.circular(32),
+                                         ),
+                                       ),
+                                     ),
+                                     OutlinedButton(
+                                       onPressed: () {
+                                         Navigator.push(
+                                           context,
+                                           MaterialPageRoute(
+                                             builder: (context) =>
+                                                 const StaffLoginPage(role: 'counsellor'),
+                                           ),
+                                         );
+                                       },
+                                       style: OutlinedButton.styleFrom(
+                                         side: const BorderSide(
+                                           color: Color(0xFFDDD5CE),
+                                         ),
+                                         padding: const EdgeInsets.symmetric(
+                                           horizontal: 24,
+                                           vertical: 12,
+                                         ),
+                                         shape: RoundedRectangleBorder(
+                                           borderRadius:
+                                               BorderRadius.circular(32),
+                                         ),
+                                       ),
+                                       child: const Text(
+                                         'Counsellor view',
+                                         style: TextStyle(
+                                           color: Color(0xFF1A1A1A),
+                                         ),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
                                 const SizedBox(height: 42),
 
                                 // Feature keywords
