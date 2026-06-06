@@ -326,7 +326,7 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                           'Campus distress overview and high-priority cases',
                           style: TextStyle(
                             fontSize: 14,
-                            color: const Color(0xFF666666).withValues(alpha: 0.8),
+                            color: const Color(0xFF666666).withOpacity(0.8),
                           ),
                         ),
                       ],
@@ -707,7 +707,7 @@ class LineChartPainter extends CustomPainter {
 
     // Draw Grid Lines (Y axis values: 0, 10, 20, 30, 42)
     final gridPaint = Paint()
-      ..color = const Color(0xFFDDD5CE).withValues(alpha: 0.5)
+      ..color = const Color(0xFFDDD5CE).withOpacity(0.5)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
@@ -1053,11 +1053,11 @@ class _AlertQueueTable extends StatelessWidget {
                     return DataRow(
                       selected: isSelected,
                       onSelectChanged: (_) => onSelect(student),
-                      color: WidgetStateProperty.resolveWith<Color?>((states) {
-                        if (states.contains(WidgetState.selected)) {
+                      color: MaterialStateProperty.resolveWith<Color?>((states) {
+                        if (states.contains(MaterialState.selected)) {
                           return const Color(0xFFE2EBE2); // Muted selected green
                         }
-                        if (states.contains(WidgetState.hovered)) {
+                        if (states.contains(MaterialState.hovered)) {
                           return const Color(0xFFEFECE6); // Muted hover cream
                         }
                         return null; // Default
@@ -1385,7 +1385,7 @@ class _AssessmentSummaryPanel extends StatelessWidget {
                         return Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF354B0E).withValues(alpha: 0.1),
+                            color: const Color(0xFF354B0E).withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: const Color(0xFF354B0E),
@@ -1453,7 +1453,7 @@ class _AssessmentSummaryPanel extends StatelessWidget {
                           icon: Icon(isContacted ? Icons.check : Icons.assignment_turned_in),
                           label: Text(isContacted ? 'Logged Successfully' : 'Initiate Intervention'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: isContacted ? const Color(0xFF354B0E).withValues(alpha: 0.8) : const Color(0xFF354B0E),
+                            backgroundColor: isContacted ? const Color(0xFF354B0E).withOpacity(0.8) : const Color(0xFF354B0E),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(

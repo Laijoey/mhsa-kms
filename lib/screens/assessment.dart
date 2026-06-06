@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'result.dart';
 import 'progress.dart';
 import 'student_session.dart';
+import 'package:mhsa_kms/expert_system/dass_rules.dart';
+import 'package:mhsa_kms/expert_system/recommendation_engine.dart';
+import 'package:mhsa_kms/expert_system/expert_system.dart';
 
 class AssessmentPage extends StatefulWidget {
   final StudentSession? session;
@@ -57,10 +60,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   int get answeredCount => answers.keys.length;
   int get progress => ((answeredCount / total) * 100).round();
-  bool get pageComplete => currentQuestions
-      .asMap()
-      .entries
-      .every((e) => answers[currentPage * perPage + e.key] != null);
+  bool get pageComplete {
+    for (int i = 0; i < currentQuestions.length; i++) {
+      if (answers[currentPage * perPage + i] == null) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
@@ -69,26 +76,38 @@ class _AssessmentPageState extends State<AssessmentPage> {
   }
 
   void submitAssessment() {
-    // Calculate scores
-    int depression = 0, anxiety = 0, stress = 0;
+    print("RAW ANSWERS: $answers");
 
-    answers.forEach((q, answer) {
-      if (q % 3 == 0)
-        depression += answer;
-      else if (q % 3 == 1)
-        anxiety += answer;
-      else
-        stress += answer;
+    // 1. check missing answers
+    if (answers.length < total) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Please answer all questions"),
+        ),
+      );
+      return;
+    }
+
+    // 2. convert Map → List in correct order
+    List<int> answerList = List.generate(total, (index) {
+      return answers[index] ?? 0;
     });
 
-    // Navigate to result page
+    // 3. CALL REAL DASS CALCULATOR (IMPORTANT)
+    final result = DASS21Calculator.calculate(answers: answerList);
+
+    print("DEPRESSION: ${result.depression}");
+    print("ANXIETY: ${result.anxiety}");
+    print("STRESS: ${result.stress}");
+
+    // 4. pass correct result
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ResultPage(
-          depression: depression,
-          anxiety: anxiety,
-          stress: stress,
+          depression: result.depression,
+          anxiety: result.anxiety,
+          stress: result.stress,
           session: widget.session,
         ),
       ),
