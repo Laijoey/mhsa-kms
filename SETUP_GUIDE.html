@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHSA-KMS Project Setup Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .header {
+            border-bottom: 3px solid #354B0E;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            color: #354B0E;
+            margin-bottom: 10px;
+        }
+        .header p {
+            font-size: 1.1em;
+            color: #666;
+        }
+        h2 {
+            color: #354B0E;
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 4px solid #354B0E;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #666;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d73a49;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .warning strong {
+            color: #856404;
+        }
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background: #354B0E;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .toc {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .toc ol {
+            margin-left: 20px;
+        }
+        .toc a {
+            color: #354B0E;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .file-tree {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 50px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+            h2 {
+                page-break-after: avoid;
+            }
+            pre {
+                page-break-inside: avoid;
+            }
+            table {
+                page-break-inside: avoid;
+            }
+        }
+        .checkmark {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 MHSA-KMS Project Setup Guide</h1>
+            <p>Mental Health Student Assessment - Knowledge Management System</p>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Quick Navigation</h3>
+            <ol>
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#structure">Project Structure</a></li>
+                <li><a href="#clone">Clone the Repository</a></li>
+                <li><a href="#firebase">Firebase Setup</a></li>
+                <li><a href="#backend">Backend Setup</a></li>
+                <li><a href="#frontend">Frontend Setup</a></li>
+                <li><a href="#running">Running the Project</a></li>
+                <li><a href="#database">Database Initialization</a></li>
+                <li><a href="#credentials">Demo Credentials</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+            </ol>
+        </div>
+
+        <h2 id="prerequisites">✅ Prerequisites</h2>
+        <p>Make sure you have these installed on your machine:</p>
+
+        <h3>Required Software</h3>
+        <ul>
+            <li><strong>Node.js</strong> (v16 or higher) - <a href="https://nodejs.org/">Download</a></li>
+            <li><strong>Flutter</strong> (latest stable) - <a href="https://flutter.dev/docs/get-started/install">Download</a></li>
+            <li><strong>Firebase CLI</strong> - Install via npm: <code>npm install -g firebase-tools</code></li>
+            <li><strong>Git</strong> - <a href="https://git-scm.com/">Download</a></li>
+            <li><strong>Google Chrome</strong> (for Flutter web testing)</li>
+        </ul>
+
+        <h3>Verify Installation</h3>
+        <pre>node --version
+npm --version
+flutter --version
+firebase --version
+git --version</pre>
+
+        <h2 id="structure">📁 Project Structure</h2>
+        <div class="file-tree">
+mhsa-kms/
+├── backend/                    # Node.js/Express backend
+│   ├── src/
+│   │   ├── auth/              # Authentication module
+│   │   ├── assessments/        # Assessment scoring & rules
+│   │   ├── analytics/          # Campus analytics
+│   │   ├── expert-system/      # Expert system engine
+│   │   ├── shared/             # Firestore & types
+│   │   └── app.ts             # Express app factory
+│   ├── firebase-key.json       # Firebase credentials (LOCAL ONLY!)
+│   ├── seed.ts                # Database seeding script
+│   ├── package.json
+│   └── tsconfig.json
+├── lib/                        # Flutter app (Dart)
+│   ├── screens/               # UI screens
+│   ├── services/              # API service layer
+│   ├── expert_system/         # Expert system (reference)
+│   └── main.dart
+├── pubspec.yaml               # Flutter dependencies
+├── firebase.json              # Firebase emulator config
+└── README.md                  # Project overview
+        </div>
+
+        <h2 id="clone">📥 Clone the Repository</h2>
+        <pre>git clone https://github.com/Laijoey/mhsa-kms.git
+cd mhsa-kms
+
+# Verify you're on main branch
+git branch</pre>
+
+        <h2 id="firebase">🔑 Firebase Setup</h2>
+        <div class="warning">
+            <strong>⚠️ IMPORTANT:</strong> The <code>firebase-key.json</code> file is NOT in the repository for security reasons. You MUST get it from your project lead.
+        </div>
+
+        <h3>Step 1: Get the Firebase Key</h3>
+        <p>Ask your project lead (Jiaye) for the <code>firebase-key.json</code> file via:</p>
+        <ul>
+            <li>Email</li>
+            <li>Slack / Teams</li>
+            <li>WhatsApp</li>
+            <li>In-person</li>
+        </ul>
+        <p><strong>⚠️ Do NOT share this file publicly or commit it to git!</strong></p>
+
+        <h3>Step 2: Install Firebase Key</h3>
+        <pre>cd backend
+
+# Paste the firebase-key.json file in this directory
+# File location: backend/firebase-key.json</pre>
+
+        <p>The file structure should look like:</p>
+        <div class="file-tree">
+backend/
+├── firebase-key.json      ← Your secret key (keep private!)
+├── package.json
+├── tsconfig.json
+└── src/
+        </div>
+
+        <h3>Step 3: Verify Firebase Access</h3>
+        <pre>cd backend
+npm install
+npm run dev</pre>
+
+        <p>You should see:</p>
+        <pre>MHSA-KMS Backend listening on port 3000
+Firebase Emulator: disabled</pre>
+
+        <div class="warning">
+            <strong>If it fails with "firebase-key.json not found":</strong> The key file is missing. Contact your project lead.
+        </div>
+
+        <h2 id="backend">⚙️ Backend Setup</h2>
+
+        <h3>Step 1: Install Dependencies</h3>
+        <pre>cd backend
+npm install</pre>
+
+        <h3>Step 2: Environment Configuration</h3>
+        <p>The <code>.env</code> file is already configured. Verify <code>backend/.env</code> exists and contains:</p>
+        <pre>FIREBASE_PROJECT_ID=mhsa-kms
+FIREBASE_DATABASE_URL=https://mhsa-kms.firebaseio.com
+NODE_ENV=production
+PORT=3000</pre>
+
+        <p>No changes needed unless you're using Firebase Emulator.</p>
+
+        <h3>Step 3: Verify Backend Compiles</h3>
+        <pre>npm run build</pre>
+        <p>Should complete with no errors.</p>
+
+        <h2 id="frontend">🎨 Frontend Setup</h2>
+
+        <h3>Step 1: Install Flutter Dependencies</h3>
+        <pre>flutter pub get</pre>
+
+        <h3>Step 2: Verify Flutter Environment</h3>
+        <pre>flutter doctor</pre>
+        <p>All items should have checkmarks (✓). If not, follow the instructions.</p>
+
+        <h3>Step 3: Check for Type Errors</h3>
+        <pre>flutter analyze</pre>
+        <p>Should show no errors (warnings are okay).</p>
+
+        <h2 id="running">🚀 Running the Project</h2>
+        <p>You'll need <strong>3 terminal windows</strong> to run everything:</p>
+
+        <h3>Terminal 1: Firebase (Optional)</h3>
+        <p>Skip this if using production Firebase (recommended).</p>
+        <pre>firebase emulators:start</pre>
+
+        <h3>Terminal 2: Backend Server</h3>
+        <pre>cd backend
+npm run dev</pre>
+        <p>Expected output:</p>
+        <pre>[nodemon] starting `ts-node src/server.ts`
+MHSA-KMS Backend listening on port 3000
+Environment: production
+Firebase Emulator: disabled</pre>
+
+        <h3>Terminal 3: Flutter App</h3>
+        <pre>flutter run -d chrome</pre>
+        <p>This opens the app in Chrome. Other options:</p>
+        <ul>
+            <li><code>chrome</code> — Web browser (recommended)</li>
+            <li><code>windows</code> — Windows desktop</li>
+            <li><code>macos</code> — macOS desktop</li>
+        </ul>
+
+        <h2 id="database">💾 Database Initialization</h2>
+
+        <h3>Option 1: Seed Test Data (Recommended)</h3>
+        <pre>cd backend
+npx ts-node seed.ts</pre>
+
+        <p>This creates:</p>
+        <ul>
+            <li>3 demo users (student, counsellor, admin)</li>
+            <li>11 assessment rules</li>
+            <li>6 knowledge base resources</li>
+            <li>20 test assessments across 14 weeks</li>
+        </ul>
+
+        <p>Expected output:</p>
+        <pre>✓ Seed completed successfully!
+
+Demo credentials:
+  Student: S001 / demo1234
+  Counsellor: C001 / demo1234
+  Admin: A001 / demo1234</pre>
+
+        <h3>Option 2: Manual Setup</h3>
+        <p>Go to <a href="https://console.firebase.google.com/">Firebase Console</a>, select mhsa-kms project, and create collections manually (not recommended).</p>
+
+        <h2 id="credentials">🔐 Demo Credentials</h2>
+        <table>
+            <tr>
+                <th>Role</th>
+                <th>Identifier</th>
+                <th>Password</th>
+                <th>Features</th>
+            </tr>
+            <tr>
+                <td><strong>Student</strong></td>
+                <td>S001</td>
+                <td>demo1234</td>
+                <td>Submit assessments, view results, track progress</td>
+            </tr>
+            <tr>
+                <td><strong>Counsellor</strong></td>
+                <td>C001</td>
+                <td>demo1234</td>
+                <td>View high-risk queue, campus analytics, knowledge base</td>
+            </tr>
+            <tr>
+                <td><strong>Admin</strong></td>
+                <td>A001</td>
+                <td>demo1234</td>
+                <td>Manage rules, manage resources, view all data</td>
+            </tr>
+        </table>
+
+        <h3>Testing Flow</h3>
+        <ol>
+            <li><strong>Student:</strong> Login → Assessment → Submit → View Result</li>
+            <li><strong>Counsellor:</strong> View Dashboard → Check High-Risk Queue</li>
+            <li><strong>Admin:</strong> Manage Rules → Manage Knowledge Base</li>
+        </ol>
+
+        <h2 id="troubleshooting">🆘 Troubleshooting</h2>
+
+        <h3>Backend Issues</h3>
+
+        <h4>Error: "Cannot find module 'firebase-admin'"</h4>
+        <pre>cd backend
+npm install</pre>
+
+        <h4>Error: "firebase-key.json not found"</h4>
+        <ul>
+            <li>Ask project lead for the file</li>
+            <li>Save it to <code>backend/firebase-key.json</code></li>
+            <li>Verify: <code>ls backend/firebase-key.json</code></li>
+        </ul>
+
+        <h4>Error: "Port 3000 already in use"</h4>
+        <pre># On Windows:
+netstat -ano | findstr :3000
+taskkill /PID &lt;PID&gt; /F
+
+# On macOS/Linux:
+lsof -i :3000
+kill -9 &lt;PID&gt;</pre>
+
+        <h3>Frontend Issues</h3>
+
+        <h4>Flutter pub get fails</h4>
+        <pre>flutter clean
+flutter pub get</pre>
+
+        <h4>Chrome driver error</h4>
+        <pre>flutter clean
+flutter pub get
+flutter run -d chrome</pre>
+
+        <h4>Cannot connect to backend (port 3000)</h4>
+        <ul>
+            <li>Verify backend is running: <code>http://localhost:3000</code></li>
+            <li>Check firewall isn't blocking port 3000</li>
+            <li>Restart both backend and app</li>
+        </ul>
+
+        <h3>Database Issues</h3>
+
+        <h4>Seed script fails</h4>
+        <pre>cd backend
+npm install
+npx ts-node seed.ts</pre>
+
+        <h4>No data in dashboards</h4>
+        <ul>
+            <li>Run seed script: <code>npx ts-node seed.ts</code></li>
+            <li>Check Firebase has correct collections</li>
+            <li>Verify Firebase credentials in <code>firebase-key.json</code></li>
+        </ul>
+
+        <h2>📚 Common Commands</h2>
+
+        <h3>Backend</h3>
+        <pre>cd backend
+
+npm install          # Install dependencies
+npm run dev         # Start development server
+npm run build       # Compile TypeScript
+npx ts-node seed.ts # Seed database</pre>
+
+        <h3>Frontend</h3>
+        <pre>flutter pub get                    # Install dependencies
+flutter run -d chrome              # Run on web
+flutter run -d windows             # Run on Windows
+flutter clean                      # Clean build
+flutter analyze                    # Check for errors</pre>
+
+        <h3>Git</h3>
+        <pre>git status                    # Check changes
+git pull origin main              # Get latest code
+git push origin main              # Push your changes
+git log --oneline                 # View commit history</pre>
+
+        <h2>🎯 Next Steps</h2>
+        <div class="success">
+            <ol>
+                <li>Clone the repository</li>
+                <li>Get <code>firebase-key.json</code> from project lead</li>
+                <li>Install dependencies (backend & frontend)</li>
+                <li>Run seed script to populate database</li>
+                <li>Start backend server</li>
+                <li>Start Flutter app</li>
+                <li>Login with demo credentials</li>
+                <li>Test all features</li>
+            </ol>
+            <p><strong>You're ready to develop! 🚀</strong></p>
+        </div>
+
+        <div class="footer">
+            <p><strong>Project:</strong> MHSA-KMS (Mental Health Student Assessment - Knowledge Management System)</p>
+            <p><strong>GitHub:</strong> https://github.com/Laijoey/mhsa-kms</p>
+            <p><strong>Last Updated:</strong> June 9, 2026</p>
+            <p><strong>Version:</strong> 1.0 | <strong>Status:</strong> Production Ready</p>
+        </div>
+    </div>
+</body>
+</html>
