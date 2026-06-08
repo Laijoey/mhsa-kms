@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../expert_system/expert_system.dart';
 
 // Configuration
 const String _baseUrl = 'http://localhost:3000/api/v1';
@@ -165,14 +166,55 @@ class ApiService {
   }
 
   // Assessments
-  static Future<AssessmentResult> submitAssessment(List<int> rawAnswers) async {
-    final response = await _request(
-      'POST',
-      '/assessments',
-      body: {'rawAnswers': rawAnswers},
-    );
+  /// Submit assessment to backend with fallback to local expert system
+  static Future<AssessmentResult> submitAssessment(
+    List<int> rawAnswers, {
+    bool useLocalFallback = true,
+  }) async {
+    try {
+      // Try backend first (primary)
+      final response = await _request(
+        'POST',
+        '/assessments',
+        body: {'rawAnswers': rawAnswers},
+      );
+      return AssessmentResult.fromJson(response);
+    } catch (e) {
+      // Fallback to local expert system if backend fails
+      if (useLocalFallback) {
+        print('⚠️ Backend failed: $e. Using local expert system...');
+        return _useLocalExpertSystem(rawAnswers);
+      }
+      rethrow;
+    }
+  }
 
-    return AssessmentResult.fromJson(response);
+  /// Use local expert system (11 sophisticated rules)
+  static AssessmentResult _useLocalExpertSystem(List<int> rawAnswers) {
+    final result = ExpertSystem.process(rawAnswers);
+
+    return AssessmentResult(
+      id: 'LOCAL_${DateTime.now().millisecondsSinceEpoch}',
+      takenAt: DateTime.now().toIso8601String(),
+      normalisedScores: {
+        'dep': result['normalisedScores']['depression'] as int,
+        'anx': result['normalisedScores']['anxiety'] as int,
+        'str': result['normalisedScores']['stress'] as int,
+      },
+      severities: {
+        'dep': result['severities']['depression'] as String,
+        'anx': result['severities']['anxiety'] as String,
+        'str': result['severities']['stress'] as String,
+      },
+      firedRuleId: result['firedRuleId'] as String,
+      riskLevel: result['riskLevel'] as String,
+      recommendation: RecommendationResult(
+        title: result['recommendation']['title'] as String,
+        body: result['recommendation']['body'] as String,
+        actions: List<String>.from(result['recommendation']['actions'] as List),
+      ),
+      appliedTacitRules: List<String>.from(result['appliedTacitRules'] as List),
+    );
   }
 
   static Future<List<AssessmentResult>> getMyHistory() async {

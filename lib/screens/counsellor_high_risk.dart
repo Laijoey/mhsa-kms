@@ -751,9 +751,9 @@ class LineChartPainter extends CustomPainter {
       final int wk = item['week'] as int;
       final double x = paddingLeft + (wk - 1) * xRatio;
 
-      final double depY = height - paddingBottom - (item['depression'] as int) * yRatio;
-      final double anxY = height - paddingBottom - (item['anxiety'] as int) * yRatio;
-      final double strY = height - paddingBottom - (item['stress'] as int) * yRatio;
+      final double depY = height - paddingBottom - ((item['depression'] as num?)?.toDouble() ?? 0.0) * yRatio;
+      final double anxY = height - paddingBottom - ((item['anxiety'] as num?)?.toDouble() ?? 0.0) * yRatio;
+      final double strY = height - paddingBottom - ((item['stress'] as num?)?.toDouble() ?? 0.0) * yRatio;
 
       if (i == 0) {
         depPath.moveTo(x, depY);
@@ -778,9 +778,9 @@ class LineChartPainter extends CustomPainter {
       final int wk = item['week'] as int;
       final double x = paddingLeft + (wk - 1) * xRatio;
 
-      final double depY = height - paddingBottom - (item['depression'] as int) * yRatio;
-      final double anxY = height - paddingBottom - (item['anxiety'] as int) * yRatio;
-      final double strY = height - paddingBottom - (item['stress'] as int) * yRatio;
+      final double depY = height - paddingBottom - ((item['depression'] as num?)?.toDouble() ?? 0.0) * yRatio;
+      final double anxY = height - paddingBottom - ((item['anxiety'] as num?)?.toDouble() ?? 0.0) * yRatio;
+      final double strY = height - paddingBottom - ((item['stress'] as num?)?.toDouble() ?? 0.0) * yRatio;
 
       // Draw Depression Dot
       dotPaint.color = Colors.white;
@@ -825,9 +825,9 @@ class LineChartPainter extends CustomPainter {
 
       // Find the data for this week
       final weekData = history.firstWhere((element) => element['week'] == hoveredWeek);
-      final int dep = weekData['depression'] as int;
-      final int anx = weekData['anxiety'] as int;
-      final int str = weekData['stress'] as int;
+      final num dep = (weekData['depression'] as num?) ?? 0;
+      final num anx = (weekData['anxiety'] as num?) ?? 0;
+      final num str = (weekData['stress'] as num?) ?? 0;
 
       // Draw tooltip box
       final double tooltipWidth = 100.0;

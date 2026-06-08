@@ -7,6 +7,7 @@ import assessmentsRouter from './assessments/assessments.router';
 import analyticsRouter from './analytics/analytics.router';
 import resourcesRouter from './resources/resources.router';
 import rulesRouter from './rules/rules.router';
+import expertSystemRouter from './expert-system/expertSystem.router';
 import { ApiError } from './shared/errors';
 
 export function createApp(): Express {
@@ -55,6 +56,7 @@ export function createApp(): Express {
   app.use(`${apiPrefix}/analytics`, analyticsRouter);
   app.use(`${apiPrefix}/resources`, resourcesRouter);
   app.use(`${apiPrefix}/rules`, rulesRouter);
+  app.use(`${apiPrefix}/assessments`, expertSystemRouter); // Expert system endpoints
 
   // 404 handler
   app.use((req: Request, res: Response) => {

@@ -1,5 +1,6 @@
-import 'risk_classifier.dart';
-import 'knowledge_base.dart';
+// DEPRECATED: This file is kept for reference only.
+// The expert system now uses rule_engine.dart with 11 sophisticated rules.
+// See: lib/expert_system/rule_engine.dart
 
 class RecommendationEngine {
   static Map<String, dynamic> generate({

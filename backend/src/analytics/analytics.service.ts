@@ -64,12 +64,36 @@ export async function getCampusAnalytics() {
     }
   });
 
-  // Severity distribution (percentage of students in each category)
-  const severityDist = {
-    dep: countSeverities(assessments.map((a) => a.severities.dep)),
-    anx: countSeverities(assessments.map((a) => a.severities.anx)),
-    str: countSeverities(assessments.map((a) => a.severities.str)),
-  };
+ // Severity distribution based on overall risk levels
+const riskToSeverity: Record<RiskLevel, Severity> = {
+  'CRITICAL': 'Extremely Severe',
+  'HIGH': 'Severe',
+  'MODERATE': 'Moderate',
+  'LOW': 'Mild',
+  'NORMAL': 'Normal',
+};
+
+const severityCount: Record<Severity, number> = {
+  'Normal': 0,
+  'Mild': 0,
+  'Moderate': 0,
+  'Severe': 0,
+  'Extremely Severe': 0,
+};
+
+assessments.forEach((a) => {
+  const severity = riskToSeverity[a.riskLevel as RiskLevel] || 'Normal';
+  severityCount[severity]++;
+});
+
+const total = assessments.length;
+const severityDist: Record<Severity, number> = {
+  'Normal': total > 0 ? (severityCount['Normal'] / total) * 100 : 0,
+  'Mild': total > 0 ? (severityCount['Mild'] / total) * 100 : 0,
+  'Moderate': total > 0 ? (severityCount['Moderate'] / total) * 100 : 0,
+  'Severe': total > 0 ? (severityCount['Severe'] / total) * 100 : 0,
+  'Extremely Severe': total > 0 ? (severityCount['Extremely Severe'] / total) * 100 : 0,
+};
 
   // Weekly trend (last 14 weeks)
   const weeklyTrend = generateWeeklyTrend(assessments);
@@ -119,7 +143,7 @@ function countSeverities(severities: Severity[]) {
  */
 function generateWeeklyTrend(
   assessments: any[],
-): Array<{ week: number; dep: number; anx: number; str: number }> {
+): Array<{ week: number; depression: number; anxiety: number; stress: number }> {
   const now = new Date();
   const weeks: Array<{
     week: number;
@@ -158,7 +182,7 @@ function generateWeeklyTrend(
   // Calculate averages per week
   return weeks.map((week) => {
     if (week.assessments.length === 0) {
-      return { week: week.week, dep: 0, anx: 0, str: 0 };
+      return { week: week.week, depression: 0, anxiety: 0, stress: 0 };
     }
 
     const sumDep = week.assessments.reduce((s, a) => s + (a.normalisedScores.dep || 0), 0);
@@ -167,9 +191,9 @@ function generateWeeklyTrend(
 
     return {
       week: week.week,
-      dep: Math.round((sumDep / week.assessments.length) * 100) / 100,
-      anx: Math.round((sumAnx / week.assessments.length) * 100) / 100,
-      str: Math.round((sumStr / week.assessments.length) * 100) / 100,
+      depression: Math.round((sumDep / week.assessments.length) * 100) / 100,
+      anxiety: Math.round((sumAnx / week.assessments.length) * 100) / 100,
+      stress: Math.round((sumStr / week.assessments.length) * 100) / 100,
     };
   });
 }
