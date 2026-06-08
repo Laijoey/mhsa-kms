@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'result.dart';
 import 'assessment.dart';
 import 'progress.dart';
@@ -15,6 +16,36 @@ class StudentDashboard extends StatefulWidget {
 
 class _StudentDashboardState extends State<StudentDashboard> {
   String _selectedNav = 'Dashboard';
+  AssessmentResult? _latestResult;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLatestAssessment();
+  }
+
+  Future<void> _loadLatestAssessment() async {
+    try {
+      final history = await ApiService.getMyHistory();
+      if (history.isNotEmpty && mounted) {
+        setState(() {
+          _latestResult = history.first;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   String get _studentName {
     final name = widget.session?.name.trim();
@@ -376,54 +407,59 @@ class _StudentDashboardState extends State<StudentDashboard> {
                                       color: Color(0xFF1A1A1A),
                                     ),
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 8,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFEBEE),
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Text(
-                                      'Severe',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFFD32F2F),
+                                  if (_latestResult != null)
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFEBEE),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        _latestResult!.riskLevel,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                          color: Color(0xFFD32F2F),
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                               const SizedBox(height: 40),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _MetricCard(
-                                      label: 'DEPRESSION',
-                                      value: '18',
-                                      status: 'Moderate',
-                                    ),
-                                  ),
-                                  const SizedBox(width: 24),
-                                  Expanded(
-                                    child: _MetricCard(
-                                      label: 'ANXIETY',
-                                      value: '16',
-                                      status: 'Severe',
-                                    ),
-                                  ),
-                                  const SizedBox(width: 24),
-                                  Expanded(
-                                    child: _MetricCard(
-                                      label: 'STRESS',
-                                      value: '24',
-                                      status: 'Moderate',
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              _isLoading
+                                  ? const Center(child: CircularProgressIndicator())
+                                  : _latestResult == null
+                                      ? const Text('No assessment data available')
+                                      : Row(
+                                          children: [
+                                            Expanded(
+                                              child: _MetricCard(
+                                                label: 'DEPRESSION',
+                                                value: '${_latestResult!.normalisedScores['dep']}',
+                                                status: _latestResult!.severities['dep'] ?? 'Normal',
+                                              ),
+                                            ),
+                                            const SizedBox(width: 24),
+                                            Expanded(
+                                              child: _MetricCard(
+                                                label: 'ANXIETY',
+                                                value: '${_latestResult!.normalisedScores['anx']}',
+                                                status: _latestResult!.severities['anx'] ?? 'Normal',
+                                              ),
+                                            ),
+                                            const SizedBox(width: 24),
+                                            Expanded(
+                                              child: _MetricCard(
+                                                label: 'STRESS',
+                                                value: '${_latestResult!.normalisedScores['str']}',
+                                                status: _latestResult!.severities['str'] ?? 'Normal',
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                             ],
                           ),
                         ),

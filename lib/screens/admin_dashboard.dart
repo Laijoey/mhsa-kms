@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({Key? key}) : super(key: key);
@@ -25,11 +26,37 @@ class _AdminDashboardState extends State<AdminDashboard> {
   late List<Map<String, dynamic>> _questions;
   late List<Map<String, dynamic>> _rules;
   late List<Map<String, dynamic>> _knowledgeResources;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _initializeData();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final results = await Future.wait([
+        ApiService.getRules(),
+        ApiService.getResources(),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _initializeData();
+          _rules = (results[0] as List<dynamic>).cast<Map<String, dynamic>>();
+          _knowledgeResources = (results[1] as List<dynamic>).cast<Map<String, dynamic>>();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _initializeData();
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void _initializeData() {
@@ -101,141 +128,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
       },
     ];
 
-    // Underlaying production rules with modular settings
-    _rules = [
-      {
-        'id': 'R-001',
-        'type': 'Escalation',
-        'title': 'Critical Escalation Threshold',
-        'description': 'Evaluates extreme symptoms for immediate emergency triage.',
-        'formula': 'IF Depression >= D_LIMIT OR Anxiety >= A_LIMIT',
-        'actions': [
-          'Set Risk level to CRITICAL',
-          'Display red-banner crisis alert to user',
-          'Auto-notify University Wellness Centre emergency dispatch',
-          'Lock re-assessment utility for 24 hours'
-        ],
-        'isActive': true,
-        'parameters': [
-          {'key': 'D_LIMIT', 'label': 'Depression Threshold', 'value': 28.0, 'min': 20.0, 'max': 42.0},
-          {'key': 'A_LIMIT', 'label': 'Anxiety Threshold', 'value': 20.0, 'min': 14.0, 'max': 42.0},
-        ],
-      },
-      {
-        'id': 'R-C02',
-        'type': 'Contextual',
-        'title': 'Contextual Academic Adjustment',
-        'description': 'Applies system date multipliers during peak examination schedules.',
-        'formula': 'IF System Date == Examination Period AND Stress >= S_LIMIT',
-        'actions': [
-          'Apply Exam Context Alert flag to dashboard',
-          'Append Exam Stress Management Resource Pack to recommendations',
-          'Unlock self-paced meditation sessions'
-        ],
-        'isActive': true,
-        'parameters': [
-          {'key': 'S_LIMIT', 'label': 'Stress Threshold', 'value': 19.0, 'min': 10.0, 'max': 34.0},
-        ],
-      },
-      {
-        'id': 'R-C01',
-        'type': 'Core',
-        'title': 'Multi-Domain Moderate Escalation',
-        'description': 'Escalates students displaying concurrent moderate scores in multiple domains.',
-        'formula': 'IF Depression >= D_MOD AND Anxiety >= A_MOD AND Stress >= S_MOD',
-        'actions': [
-          'Escalate overall risk classification from MODERATE to HIGH',
-          'Prioritize intake calendar slots (schedule within 48 hours)',
-          'Dispatch Multi-Domain Coping Packet (Packet M-02)'
-        ],
-        'isActive': true,
-        'parameters': [
-          {'key': 'D_MOD', 'label': 'Depression Trigger', 'value': 14.0, 'min': 10.0, 'max': 27.0},
-          {'key': 'A_MOD', 'label': 'Anxiety Trigger', 'value': 10.0, 'min': 7.0, 'max': 19.0},
-          {'key': 'S_MOD', 'label': 'Stress Trigger', 'value': 19.0, 'min': 12.0, 'max': 25.0},
-        ],
-      },
-      {
-        'id': 'R-C03',
-        'type': 'Contextual',
-        'title': 'Repeat High-Risk Student Override',
-        'description': 'Bypasses low/moderate scores if student has critical history.',
-        'formula': 'IF Student Previous Assessment == CRITICAL AND Current Score >= OVERRIDE_LIMIT',
-        'actions': [
-          'Bypass 14-day standard re-assessment cooling period',
-          'Force overall classification to CRITICAL',
-          'Ping assigned Case Officer counselor phone/email list'
-        ],
-        'isActive': false,
-        'parameters': [
-          {'key': 'OVERRIDE_LIMIT', 'label': 'Current Score Min', 'value': 14.0, 'min': 5.0, 'max': 25.0},
-        ],
-      },
-    ];
-
-    // Explicit and Tacit knowledge resources
-    _knowledgeResources = [
-      {
-        'id': 'KB-001',
-        'type': 'Explicit',
-        'title': 'DSM-5-TR General Anxiety Diagnostic Reference',
-        'category': 'Clinical Guidelines',
-        'author': 'APA Psychiatric Board',
-        'date': '2025-10-12',
-        'format': 'PDF Guideline',
-        'description': 'Standardized diagnostic indices, clinical criteria, and severity indicators for evaluating anxiety disorders in primary health care settings.',
-      },
-      {
-        'id': 'KB-002',
-        'type': 'Explicit',
-        'title': 'DASS-21 Psychometric Manual & Severity Scaling indices',
-        'category': 'DSM-5-TR / Clinical Metrics',
-        'author': 'Lovibond & Lovibond',
-        'date': '2024-03-01',
-        'format': 'Scoring Key',
-        'description': 'Official scale distribution bounds mapping cumulative raw scores (0-42) to Normal, Mild, Moderate, Severe, and Extremely Severe ranges.',
-      },
-      {
-        'id': 'KB-003',
-        'type': 'Tacit',
-        'title': 'Cognitive Reframing for Academic Exam Panic',
-        'category': 'Counselor Experiential Interventions',
-        'author': 'Evelyn Wong (Lead Counselor)',
-        'date': '2026-05-15',
-        'format': 'Playbook Document',
-        'description': 'A localized intervention checklist detailing cognitive exercises, tactile grounding, and mindfulness pacing for students during exams.',
-      },
-      {
-        'id': 'KB-004',
-        'type': 'Tacit',
-        'title': 'Addressing Cultural Somatization Filters in Asian Cohorts',
-        'category': 'Cultural Somatization Filters',
-        'author': 'Prof. Halim Ibrahim',
-        'date': '2026-04-18',
-        'format': 'Clinical Guide',
-        'description': 'Counseling manual on identifying underlying emotional distress in students presenting physical complaints (e.g. chest tightness, headaches).',
-      },
-      {
-        'id': 'KB-005',
-        'type': 'Explicit',
-        'title': 'Pharmacological Referral SOP for Acute Depression',
-        'category': 'Clinical Guidelines',
-        'author': 'University Clinic Board',
-        'date': '2026-02-10',
-        'format': 'PDF Protocol',
-        'description': 'Standard Operating Procedures outlining the clear clinical bounds and criteria under which counselors refer students for medical prescriptions.',
-      },
-      {
-        'id': 'KB-006',
-        'type': 'Tacit',
-        'title': 'Peer-Led Campus Support Circle Facilitation Kit',
-        'category': 'Counselor Experiential Interventions',
-        'author': 'Student Wellness Association',
-        'date': '2026-03-22',
-        'format': 'Experiential Toolkit',
-        'description': 'Interactive strategies, peer guidelines, and boundaries framework compiled from counselor notes and successful student cohorts.',
-      },
-    ];
+    // Initialize rules and KB with empty lists (will be loaded from API in _loadData)
+    _rules = [];
+    _knowledgeResources = [];
   }
 
   // --- ACTIONS & DIALOGS ---
@@ -825,13 +720,28 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  void _saveRuleConfiguration(Map<String, dynamic> rule) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Rule parameters for ${rule['id']} deployed to local configurator.'),
-        backgroundColor: const Color(0xFF354B0E),
-      ),
-    );
+  Future<void> _saveRuleConfiguration(Map<String, dynamic> rule) async {
+    try {
+      await ApiService.updateRule(rule['id'] as String, {
+        'isActive': rule['isActive'],
+        'parameters': rule['parameters'],
+      });
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Rule ${rule['id']} configuration saved successfully.'),
+          backgroundColor: const Color(0xFF354B0E),
+        ),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to save rule: ${e.message}'),
+          backgroundColor: const Color(0xFFD32F2F),
+        ),
+      );
+    }
   }
 
   // --- STYLING HELPERS ---

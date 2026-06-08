@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'assessment.dart';
 import 'result.dart';
 import 'student_session.dart';
@@ -19,29 +20,66 @@ class _ProgressPageState extends State<ProgressPage> {
   static const Color _anxietyColor = Color(0xFF00888A);
   static const Color _stressColor = Color(0xFFE0834F);
 
-  final List<_ProgressRecord> _progressRecords = const [
-    _ProgressRecord(
-      date: '5/12/2026',
-      depression: 18,
-      anxiety: 16,
-      stress: 24,
-      overall: 'Severe',
-    ),
-    _ProgressRecord(
-      date: '4/28/2026',
-      depression: 22,
-      anxiety: 24,
-      stress: 10,
-      overall: 'Extremely Severe',
-    ),
-    _ProgressRecord(
-      date: '4/14/2026',
-      depression: 22,
-      anxiety: 24,
-      stress: 18,
-      overall: 'Extremely Severe',
-    ),
-  ];
+  List<_ProgressRecord> _progressRecords = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    try {
+      final history = await ApiService.getMyHistory();
+      setState(() {
+        _progressRecords = history.map((entry) {
+          // Convert risk level to display-friendly label
+          String overallLabel = _riskLevelToDisplay(entry.riskLevel);
+          return _ProgressRecord(
+            date: _formatDate(entry.takenAt),
+            depression: entry.normalisedScores['dep'] ?? 0,
+            anxiety: entry.normalisedScores['anx'] ?? 0,
+            stress: entry.normalisedScores['str'] ?? 0,
+            overall: overallLabel,
+          );
+        }).toList();
+        _isLoading = false;
+      });
+    } on ApiException catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+        _isLoading = false;
+      });
+    }
+  }
+
+  String _formatDate(String isoString) {
+    try {
+      final dt = DateTime.parse(isoString);
+      return '${dt.month}/${dt.day}/${dt.year}';
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
+
+  String _riskLevelToDisplay(String riskLevel) {
+    switch (riskLevel) {
+      case 'CRITICAL':
+        return 'Extremely Severe';
+      case 'HIGH':
+        return 'Severe';
+      case 'MODERATE':
+        return 'Moderate';
+      case 'LOW':
+        return 'Mild';
+      case 'NORMAL':
+        return 'Normal';
+      default:
+        return 'Unknown';
+    }
+  }
 
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
@@ -216,15 +254,24 @@ class _ProgressPageState extends State<ProgressPage> {
 
             // Content
             Expanded(
-              child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1220),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _errorMessage != null
+                      ? Center(
+                          child: Text(
+                            'Error loading history: $_errorMessage',
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 1220),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                         const Text(
                           'PROGRESS',
                           style: TextStyle(
@@ -640,7 +687,7 @@ class _ProgressChartPainter extends CustomPainter {
       for (var i = 0; i < values.length; i++)
         Offset(
           left + chartWidth * i / (values.length - 1),
-          top + chartHeight * (1 - values[i] / 30),
+          top + chartHeight * (1 - values[i] / 42),
         ),
     ];
 

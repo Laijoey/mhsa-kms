@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'result.dart';
 import 'progress.dart';
 import 'student_session.dart';
@@ -17,6 +18,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
   int currentPage = 0;
   final int perPage = 7;
   String _selectedNav = 'Assessment';
+  bool _isSubmitting = false;
+  late ScrollController _scrollController;
 
   // DASS-21 Questions
   final List<String> questions = [
@@ -62,37 +65,61 @@ class _AssessmentPageState extends State<AssessmentPage> {
       .entries
       .every((e) => answers[currentPage * perPage + e.key] != null);
 
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 
-  void submitAssessment() {
-    // Calculate scores
-    int depression = 0, anxiety = 0, stress = 0;
-
-    answers.forEach((q, answer) {
-      if (q % 3 == 0)
-        depression += answer;
-      else if (q % 3 == 1)
-        anxiety += answer;
-      else
-        stress += answer;
+  Future<void> submitAssessment() async {
+    if (_isSubmitting) return;
+    setState(() {
+      _isSubmitting = true;
     });
 
-    // Navigate to result page
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ResultPage(
-          depression: depression,
-          anxiety: anxiety,
-          stress: stress,
-          session: widget.session,
+    try {
+      // Build ordered answers list (0-indexed, length 21)
+      final rawAnswers = List<int>.generate(21, (i) => answers[i] ?? 0);
+
+      // Call API to score and get recommendation
+      final result = await ApiService.submitAssessment(rawAnswers);
+
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultPage(
+            session: widget.session,
+            assessmentResult: result,
+          ),
         ),
-      ),
-    );
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Submission failed: ${e.message}'),
+          backgroundColor: const Color(0xFFD32F2F),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isSubmitting = false;
+      });
+    }
   }
 
   @override
@@ -264,6 +291,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             // Main Content
             Expanded(
               child: SingleChildScrollView(
+                controller: _scrollController,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
                 child: Center(
@@ -542,7 +570,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
                             if (currentPage < pages - 1)
                               ElevatedButton.icon(
                                 onPressed: pageComplete
-                                    ? () => setState(() => currentPage++)
+                                    ? () {
+                                        setState(() => currentPage++);
+                                        Future.delayed(const Duration(milliseconds: 100), () {
+                                          if (_scrollController.hasClients) {
+                                            _scrollController.jumpTo(0);
+                                          }
+                                        });
+                                      }
                                     : null,
                                 icon: const Icon(Icons.arrow_forward),
                                 label: const Text('Next'),

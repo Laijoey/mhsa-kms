@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'assessment.dart';
 import 'progress.dart';
 import 'student_session.dart';
@@ -8,6 +9,7 @@ class ResultPage extends StatefulWidget {
   final int anxiety;
   final int stress;
   final StudentSession? session;
+  final AssessmentResult? assessmentResult;
 
   const ResultPage({
     Key? key,
@@ -15,6 +17,7 @@ class ResultPage extends StatefulWidget {
     this.anxiety = 0,
     this.stress = 0,
     this.session,
+    this.assessmentResult,
   }) : super(key: key);
 
   @override
@@ -23,13 +26,50 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
   String _selectedNav = 'Result';
+  AssessmentResult? _result;
+  bool _isLoading = false;
 
-  String _getSeverity(int score) {
-    if (score < 5) return 'Normal';
-    if (score < 10) return 'Mild';
-    if (score < 15) return 'Moderate';
-    if (score < 21) return 'Severe';
-    return 'Extremely Severe';
+  @override
+  void initState() {
+    super.initState();
+    _result = widget.assessmentResult;
+    if (_result == null) {
+      _loadLatestAssessment();
+    }
+  }
+
+  Future<void> _loadLatestAssessment() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final history = await ApiService.getMyHistory();
+      if (history.isNotEmpty && mounted) {
+        setState(() {
+          _result = history.first;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  String _formatDate(String isoString) {
+    try {
+      final dt = DateTime.parse(isoString);
+      final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      final month = months[dt.month - 1];
+      final time = '${dt.hour % 12 == 0 ? 12 : dt.hour % 12}:${dt.minute.toString().padLeft(2, '0')}:${dt.second.toString().padLeft(2, '0')} ${dt.hour >= 12 ? 'PM' : 'AM'}';
+      return '$month ${dt.day}, ${dt.year}, $time';
+    } catch (e) {
+      return 'Date unknown';
+    }
   }
 
   Color _getSeverityColor(String severity) {
@@ -223,44 +263,52 @@ class _ResultPageState extends State<ResultPage> {
             ),
             // Content
             Expanded(
-              child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 1220),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Result Title Section
-                        const Text(
-                          'YOUR RESULT',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF999999),
-                            letterSpacing: 1,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        const Text(
-                          'A snapshot of your past week.',
-                          style: TextStyle(
-                            fontFamily: 'serif',
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF1A1A1A),
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Taken 5/17/2026, 12:36:10 PM',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color(0xFF999999),
-                          ),
-                        ),
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : _result == null
+                      ? const Center(
+                          child: Text('No assessment data available'),
+                        )
+                      : SingleChildScrollView(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 60, vertical: 54),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 1220),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Result Title Section
+                                  const Text(
+                                    'YOUR RESULT',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFF999999),
+                                      letterSpacing: 1,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    'A snapshot of your past week.',
+                                    style: TextStyle(
+                                      fontFamily: 'serif',
+                                      fontSize: 48,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF1A1A1A),
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Taken ${_formatDate(_result!.takenAt)}',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Color(0xFF999999),
+                                    ),
+                                  ),
                         const SizedBox(height: 40),
                         // Metrics Cards
                         Row(
@@ -268,39 +316,39 @@ class _ResultPageState extends State<ResultPage> {
                             Expanded(
                               child: _MetricCard(
                                 label: 'DEPRESSION',
-                                score: '${widget.depression}',
+                                score: '${_result!.normalisedScores['dep']}',
                                 maxScore: '42',
-                                status: _getSeverity(widget.depression),
+                                status: _result!.severities['dep'] ?? 'Normal',
                                 statusColor: _getSeverityColor(
-                                    _getSeverity(widget.depression)),
+                                    _result!.severities['dep'] ?? 'Normal'),
                                 progressColor: _getSeverityColor(
-                                    _getSeverity(widget.depression)),
+                                    _result!.severities['dep'] ?? 'Normal'),
                               ),
                             ),
                             const SizedBox(width: 24),
                             Expanded(
                               child: _MetricCard(
                                 label: 'ANXIETY',
-                                score: '${widget.anxiety}',
+                                score: '${_result!.normalisedScores['anx']}',
                                 maxScore: '42',
-                                status: _getSeverity(widget.anxiety),
+                                status: _result!.severities['anx'] ?? 'Normal',
                                 statusColor: _getSeverityColor(
-                                    _getSeverity(widget.anxiety)),
+                                    _result!.severities['anx'] ?? 'Normal'),
                                 progressColor: _getSeverityColor(
-                                    _getSeverity(widget.anxiety)),
+                                    _result!.severities['anx'] ?? 'Normal'),
                               ),
                             ),
                             const SizedBox(width: 24),
                             Expanded(
                               child: _MetricCard(
                                 label: 'STRESS',
-                                score: '${widget.stress}',
+                                score: '${_result!.normalisedScores['str']}',
                                 maxScore: '42',
-                                status: _getSeverity(widget.stress),
+                                status: _result!.severities['str'] ?? 'Normal',
                                 statusColor: _getSeverityColor(
-                                    _getSeverity(widget.stress)),
+                                    _result!.severities['str'] ?? 'Normal'),
                                 progressColor: _getSeverityColor(
-                                    _getSeverity(widget.stress)),
+                                    _result!.severities['str'] ?? 'Normal'),
                               ),
                             ),
                           ],
@@ -344,9 +392,9 @@ class _ResultPageState extends State<ResultPage> {
                                         width: 1,
                                       ),
                                     ),
-                                    child: const Text(
-                                      'Severe',
-                                      style: TextStyle(
+                                    child: Text(
+                                      _result!.riskLevel,
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w600,
                                         color: Color(0xFFD32F2F),
@@ -356,17 +404,17 @@ class _ResultPageState extends State<ResultPage> {
                                 ],
                               ),
                               const SizedBox(height: 16),
-                              const Text(
-                                'Generated by expert rule R4 — Severe severity in any subscale.',
-                                style: TextStyle(
+                              Text(
+                                'Generated by expert rule ${_result!.firedRuleId} — ${_result!.recommendation.title}',
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Color(0xFF666666),
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              const Text(
-                                'Recommended counselling referral. Schedule a 1:1 session within 7 days. Provide emergency contact card.',
-                                style: TextStyle(
+                              Text(
+                                _result!.recommendation.body,
+                                style: const TextStyle(
                                   fontSize: 14,
                                   color: Color(0xFF333333),
                                   height: 1.6,

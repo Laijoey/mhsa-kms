@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'counsellor_dashboard.dart';
 import 'admin_dashboard.dart';
 
@@ -19,6 +20,8 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
   final _staffIdController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _hidePassword = true;
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -27,18 +30,37 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
     super.dispose();
   }
 
-  void _login() {
+  Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
-    // Direct to the corresponding dashboard upon validation
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => widget.role == 'admin'
-            ? const AdminDashboard()
-            : const CounsellorDashboard(),
-      ),
-    );
+    try {
+      await ApiService.login(
+        role: widget.role,
+        identifier: _staffIdController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => widget.role == 'admin'
+              ? const AdminDashboard()
+              : const CounsellorDashboard(),
+        ),
+      );
+    } on ApiException catch (e) {
+      setState(() {
+        _errorMessage = e.message;
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   String? _requiredField(String? value, String label) {
@@ -161,7 +183,29 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 28),
+                          const SizedBox(height: 20),
+                          if (_errorMessage != null)
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFEBEE),
+                                border: Border.all(color: const Color(0xFFEF5350)),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.error_outline, color: Color(0xFFEF5350), size: 20),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      _errorMessage!,
+                                      style: const TextStyle(color: Color(0xFFEF5350), fontSize: 14),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          if (_errorMessage != null) const SizedBox(height: 20),
                           TextFormField(
                             controller: _staffIdController,
                             textInputAction: TextInputAction.next,
@@ -200,10 +244,8 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                             validator: (value) => _requiredField(value, 'Password'),
                           ),
                           const SizedBox(height: 24),
-                          ElevatedButton.icon(
-                            onPressed: _login,
-                            icon: const Icon(Icons.login),
-                            label: const Text('Login'),
+                          ElevatedButton(
+                            onPressed: _isLoading ? null : _login,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF354B0E),
                               foregroundColor: Colors.white,
@@ -211,7 +253,25 @@ class _StaffLoginPageState extends State<StaffLoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24),
                               ),
+                              disabledBackgroundColor: const Color(0xFFCCCCCC),
                             ),
+                            child: _isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(Icons.login, size: 20),
+                                      SizedBox(width: 8),
+                                      Text('Login'),
+                                    ],
+                                  ),
                           ),
                           const SizedBox(height: 12),
                           TextButton.icon(

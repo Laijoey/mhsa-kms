@@ -1,0 +1,234 @@
+{
+  "rules": [
+    {
+      "id": "R-001",
+      "type": "Escalation",
+      "title": "Crisis Alert - Immediate Support Needed",
+      "description": "Extremely severe depression or anxiety requiring immediate intervention",
+      "formula": "dep=ES OR anx=ES",
+      "actions": [
+        "Call Campus Crisis Hotline: +603-7967-3245 (24/7)",
+        "Email: wellness@campus.edu.my",
+        "Walk-in to Student Wellness Centre - Bangunan D, Level 2"
+      ],
+      "isActive": true,
+      "parameters": [
+        {
+          "key": "CRITICAL_THRESHOLD",
+          "label": "Extremely Severe Threshold",
+          "value": 28,
+          "min": 20,
+          "max": 42
+        }
+      ]
+    },
+    {
+      "id": "R-002",
+      "type": "Escalation",
+      "title": "Urgent Counsellor Referral",
+      "description": "Severe depression with significant anxiety",
+      "formula": "dep=Severe AND anx>=Moderate",
+      "actions": [
+        "Book urgent appointment: wellness-appointments@campus.edu.my",
+        "Call Counselling Services: +603-7965-8899",
+        "Access 24/7 text support: Crisis Chat"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-003",
+      "type": "Core",
+      "title": "Immediate Stress Management Intervention",
+      "description": "Severe or extremely severe stress",
+      "formula": "str=Severe OR str=ES",
+      "actions": [
+        "Try guided relaxation exercises",
+        "Book counselling session",
+        "Join stress-management workshop",
+        "Practice grounding techniques"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-004",
+      "type": "Core",
+      "title": "Professional Counselling Recommended",
+      "description": "Moderate depression or anxiety",
+      "formula": "dep=Moderate OR anx=Moderate",
+      "actions": [
+        "Book appointment within 1 week",
+        "Access CBT-based self-help resources",
+        "Join peer support group",
+        "Review lifestyle tips"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-005",
+      "type": "Core",
+      "title": "Time Management & Stress Relief Support",
+      "description": "Moderate stress with mild depression or anxiety",
+      "formula": "str=Moderate AND (dep>=Mild OR anx>=Mild)",
+      "actions": [
+        "Access time-management resources",
+        "Try relaxation and mindfulness exercises",
+        "Consider light counselling consultation",
+        "Schedule follow-up DASS-21 in 2 weeks"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-006",
+      "type": "Core",
+      "title": "Mood Management & Wellness Tips",
+      "description": "Mild depression with normal anxiety and stress",
+      "formula": "dep=Mild AND anx=Normal AND str=Normal",
+      "actions": [
+        "Review psychoeducation materials on mood",
+        "Maintain healthy sleep and exercise",
+        "Practice positive psychology techniques",
+        "Schedule reassessment in 1 month"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-007",
+      "type": "Core",
+      "title": "Excellent Psychological Well-Being",
+      "description": "Normal depression and anxiety with mild or normal stress",
+      "formula": "dep=Normal AND anx=Normal AND str<=Mild",
+      "actions": [
+        "Continue current well-being practices",
+        "Explore well-being resources if interested",
+        "Schedule routine reassessment in 3 months",
+        "Support peers with their mental health"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-000",
+      "type": "Core",
+      "title": "General Well-Being & Monitoring",
+      "description": "Fallback rule for unusual patterns",
+      "formula": "default",
+      "actions": [
+        "Review general well-being resources",
+        "Practice self-monitoring of mood",
+        "Schedule follow-up in 2 weeks",
+        "Contact wellness services for guidance"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-C01",
+      "type": "Contextual",
+      "title": "Triple Moderate Escalation",
+      "description": "All three subscales at moderate level",
+      "formula": "dep=Moderate AND anx=Moderate AND str=Moderate",
+      "actions": [
+        "Priority counsellor booking",
+        "Notify Wellness Centre dashboard",
+        "Comprehensive coping strategy session"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-C02",
+      "type": "Contextual",
+      "title": "Exam Period Stress Management",
+      "description": "Moderate or severe stress during exam period",
+      "formula": "in_exam_period AND str>=Moderate",
+      "actions": [
+        "Access exam stress-management guide",
+        "Schedule follow-up after exam period",
+        "Connect with exam support resources"
+      ],
+      "isActive": true,
+      "parameters": []
+    },
+    {
+      "id": "R-C03",
+      "type": "Contextual",
+      "title": "Repeat High-Risk Escalation",
+      "description": "Previous HIGH/CRITICAL assessment with current mild or worse symptoms",
+      "formula": "prev_high_critical AND any>=Mild",
+      "actions": [
+        "Generate immediate counsellor alert",
+        "Priority follow-up scheduling",
+        "Case review by senior counsellor"
+      ],
+      "isActive": true,
+      "parameters": []
+    }
+  ],
+  "resources": [
+    {
+      "id": "KB-001",
+      "type": "Explicit",
+      "title": "Clinical Guide to DASS-21",
+      "category": "Understanding Results",
+      "author": "Lovibond & Lovibond",
+      "date": "2026-01-15",
+      "format": "PDF",
+      "description": "Comprehensive guide explaining the DASS-21 assessment, scoring, and interpretation of results. Covers clinical significance thresholds and limitations."
+    },
+    {
+      "id": "KB-002",
+      "type": "Explicit",
+      "title": "Evidence-Based Treatments for Anxiety",
+      "category": "Treatment Resources",
+      "author": "Prof. Halim Ibrahim",
+      "date": "2026-02-01",
+      "format": "Article",
+      "description": "Overview of empirically supported treatments for anxiety disorders, including CBT, exposure therapy, and medication options. Includes case examples."
+    },
+    {
+      "id": "KB-003",
+      "type": "Tacit",
+      "title": "Sleep Hygiene Tips for Mental Health",
+      "category": "Self-Help Strategies",
+      "author": "Dr. Evelyn Wong (Lead Counselor)",
+      "date": "2026-01-20",
+      "format": "Guide",
+      "description": "Practical advice for improving sleep quality as a cornerstone of mental health. Includes bedtime routine suggestions and environmental modifications."
+    },
+    {
+      "id": "KB-004",
+      "type": "Tacit",
+      "title": "Stress Management Through Mindfulness",
+      "category": "Wellness Practices",
+      "author": "Dr. Amelia Chen",
+      "date": "2026-02-10",
+      "format": "Video Guide",
+      "description": "Introduction to mindfulness and meditation practices for stress reduction. Includes 5-10 minute guided exercises for daily use."
+    },
+    {
+      "id": "KB-005",
+      "type": "Explicit",
+      "title": "Cognitive Behavioral Therapy (CBT) Fundamentals",
+      "category": "Therapeutic Approaches",
+      "author": "Prof. Halim Ibrahim",
+      "date": "2026-03-05",
+      "format": "Online Course",
+      "description": "Self-paced introduction to CBT principles and techniques. Teaches cognitive restructuring, behavioral activation, and thought records."
+    },
+    {
+      "id": "KB-006",
+      "type": "Tacit",
+      "title": "Building Resilience and Coping Skills",
+      "category": "Personal Development",
+      "author": "Dr. Evelyn Wong (Lead Counselor)",
+      "date": "2026-03-12",
+      "format": "Workbook",
+      "description": "Interactive workbook for developing personal resilience, identifying coping strategies, and building a support network."
+    }
+  ]
+}

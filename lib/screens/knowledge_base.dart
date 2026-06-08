@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'counsellor_high_risk.dart';
 
 class KnowledgeBasePage extends StatefulWidget {
@@ -12,44 +13,48 @@ class KnowledgeBasePage extends StatefulWidget {
 class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
   String _selectedNav = 'Knowledge';
   String _searchQuery = '';
+  List<Map<String, dynamic>> resources = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadResources();
+  }
+
+  Future<void> _loadResources() async {
+    try {
+      final apiResources = await ApiService.getResources();
+      if (mounted) {
+        setState(() {
+          resources = apiResources.map((res) {
+            return {
+              'title': res['title'] ?? '',
+              'category': res['category'] ?? '',
+              'date': res['date'] ?? '',
+              'readTime': '${(res['description']?.toString().length ?? 0) ~/ 200} min',
+              'description': res['description'] ?? '',
+              'id': res['id'],
+              'type': res['type'],
+            };
+          }).toList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
-
-  // Knowledge base resources
-  final List<Map<String, dynamic>> resources = [
-    {
-      'title': 'Depression: Recognition & Management',
-      'category': 'Clinical Guide',
-      'date': '2026-05-01',
-      'readTime': '12 min',
-      'description': 'Comprehensive guide on identifying depression symptoms and evidence-based interventions for counsellors.',
-    },
-    {
-      'title': 'Anxiety Disorders in University Students',
-      'category': 'Research',
-      'date': '2026-04-28',
-      'readTime': '18 min',
-      'description': 'Research findings on anxiety prevalence among students and effective coping strategies.',
-    },
-    {
-      'title': 'Crisis Intervention Protocols',
-      'category': 'Procedure',
-      'date': '2026-04-15',
-      'readTime': '8 min',
-      'description': 'Step-by-step protocols for handling mental health crises on campus.',
-    },
-    {
-      'title': 'Stress Management Techniques',
-      'category': 'Resource',
-      'date': '2026-04-10',
-      'readTime': '10 min',
-      'description': 'Evidence-based stress management techniques to recommend to students.',
-    },
-  ];
 
   Color _getCategoryColor(String category) {
     switch (category) {
@@ -318,7 +323,12 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                     const SizedBox(height: 32),
 
                     // Resources List
-                    ...resources.where((resource) {
+                    if (_isLoading)
+                      const Center(child: CircularProgressIndicator())
+                    else if (resources.isEmpty)
+                      const Center(child: Text('No resources available'))
+                    else
+                      ...resources.where((resource) {
                       final title = resource['title']?.toString().toLowerCase() ?? '';
                       final description = resource['description']?.toString().toLowerCase() ?? '';
                       final category = resource['category']?.toString().toLowerCase() ?? '';

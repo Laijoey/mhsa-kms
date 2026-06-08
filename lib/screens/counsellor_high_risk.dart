@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'knowledge_base.dart';
 
 class CounsellorHighRisk extends StatefulWidget {
@@ -11,99 +12,48 @@ class CounsellorHighRisk extends StatefulWidget {
 class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
   final String _selectedNav = 'HighRisk';
   Map<String, dynamic>? _selectedStudent;
+  List<Map<String, dynamic>> _campusWeeklyHistory = [];
+  List<Map<String, dynamic>> _highRiskQueue = [];
+  Map<String, dynamic>? _campusAnalytics;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final results = await Future.wait([
+        ApiService.getHighRiskQueue(),
+        ApiService.getCampusAnalytics(),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _highRiskQueue = results[0] as List<Map<String, dynamic>>;
+          _campusAnalytics = results[1] as Map<String, dynamic>;
+          _campusWeeklyHistory = (_campusAnalytics!['weeklyTrend'] as List?)
+                  ?.cast<Map<String, dynamic>>() ??
+              [];
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
-
-  // Campus distress history data for Weeks 1 to 14
-  final List<Map<String, dynamic>> _campusWeeklyHistory = [
-    {'week': 1, 'depression': 10, 'anxiety': 8, 'stress': 12},
-    {'week': 2, 'depression': 11, 'anxiety': 9, 'stress': 13},
-    {'week': 3, 'depression': 11, 'anxiety': 10, 'stress': 14},
-    {'week': 4, 'depression': 12, 'anxiety': 11, 'stress': 13},
-    {'week': 5, 'depression': 13, 'anxiety': 12, 'stress': 15},
-    {'week': 6, 'depression': 15, 'anxiety': 14, 'stress': 18}, // Midterms start
-    {'week': 7, 'depression': 17, 'anxiety': 16, 'stress': 22}, // Midterms peak
-    {'week': 8, 'depression': 16, 'anxiety': 15, 'stress': 19},
-    {'week': 9, 'depression': 14, 'anxiety': 13, 'stress': 16},
-    {'week': 10, 'depression': 15, 'anxiety': 14, 'stress': 18},
-    {'week': 11, 'depression': 17, 'anxiety': 16, 'stress': 20},
-    {'week': 12, 'depression': 19, 'anxiety': 18, 'stress': 24}, // Projects peak
-    {'week': 13, 'depression': 21, 'anxiety': 20, 'stress': 27}, // Study week
-    {'week': 14, 'depression': 22, 'anxiety': 21, 'stress': 28}, // Exams peak
-  ];
-
-  // High-risk student alerts queue data
-  final List<Map<String, dynamic>> _highRiskQueue = [
-    {
-      'uuid': 'd3b07384-d113-4c32-a5b5-0c841e21b212',
-      'riskLevel': 'CRITICAL',
-      'timestamp': '2026-06-04 15:32',
-      'depression': 32, // Extremely Severe (>= 28)
-      'anxiety': 28,    // Extremely Severe (>= 20)
-      'stress': 36,     // Extremely Severe (>= 34)
-      'ruleTriggered': 'Rule R-001: CRITICAL',
-      'ruleDescription': 'Triggered by Extremely Severe score (Depression >= 28, Anxiety >= 20, or Stress >= 34) indicating high risk of acute distress and potential self-harm.',
-      'tacitBadges': ['Rule R-C03: Repeat High-Risk Override', 'Rule R-C02: Academic Stress Peak'],
-      'intervention': 'CRITICAL INTERVENTION PROTOCOL ACTIVATED:\n\n1. Immediate Outbound Contact: Initiate emergency phone contact immediately.\n2. Crisis Hotline Referral: Provide University Suicide & Crisis Lifeline contact detail (+603-7967-3245).\n3. Coping Packet: Dispatch Coping Packet C-01 (Crisis Management, Breathing Exercises, and Grounding Techniques).\n4. Clinical Consultation: Schedule mandatory face-to-face evaluation with the lead wellness counsellor within 12 hours.',
-      'contacted': false,
-    },
-    {
-      'uuid': '8f27ab3e-2b1d-4074-9c88-e21b9c9f28a3',
-      'riskLevel': 'CRITICAL',
-      'timestamp': '2026-06-04 11:15',
-      'depression': 14, // Moderate (14-20)
-      'anxiety': 22,    // Extremely Severe (>= 20)
-      'stress': 18,     // Mild (15-18)
-      'ruleTriggered': 'Rule R-001: CRITICAL',
-      'ruleDescription': 'Triggered by Extremely Severe Anxiety (Anxiety >= 20), indicating potential panic disorder or severe somatic distress.',
-      'tacitBadges': ['Rule R-C02: Academic Stress Peak'],
-      'intervention': 'CRITICAL ANXIETY INTERVENTION:\n\n1. Immediate Referral: Recommend immediate consultation with campus health physician for somatic symptoms.\n2. Coping Packet: Dispatch Coping Packet A-02 (Somatic Calmness & Breathing Exercises).\n3. Support Contact: Assign case officer and schedule intake interview within 24 hours.',
-      'contacted': false,
-    },
-    {
-      'uuid': 'c2b7a9e0-d85c-412e-9d2a-f3e1b0a5c4d6',
-      'riskLevel': 'HIGH',
-      'timestamp': '2026-06-03 16:45',
-      'depression': 24, // Severe (21-27)
-      'anxiety': 12,    // Moderate (10-14)
-      'stress': 22,     // Moderate (19-25)
-      'ruleTriggered': 'Rule R-002: HIGH',
-      'ruleDescription': 'Triggered by Severe Depression score (Depression 21-27), indicating persistent low mood and withdrawal.',
-      'tacitBadges': ['Rule R-C01: Multi-Domain Moderate Escalation'],
-      'intervention': 'HIGH RISK DEPRESSION STRATEGY:\n\n1. Counselling Consultation: Schedule an intake assessment within 48 hours.\n2. Academic Adjustments: Provide recommendation letter template for temporary assignment extensions.\n3. Coping Packet: Dispatch Coping Packet D-03 (Cognitive Reframing for Academic Success).',
-      'contacted': false,
-    },
-    {
-      'uuid': 'fa82b9c0-128a-4d7e-9081-3e4b2d1c0a8f',
-      'riskLevel': 'HIGH',
-      'timestamp': '2026-06-03 09:30',
-      'depression': 18, // Moderate (14-20)
-      'anxiety': 16,    // Severe (15-19)
-      'stress': 20,     // Moderate (19-25)
-      'ruleTriggered': 'Rule R-002: HIGH',
-      'ruleDescription': 'Triggered by Severe Anxiety score (Anxiety 15-19), indicating high academic and social anxiety.',
-      'tacitBadges': ['Rule R-C01: Multi-Domain Moderate Escalation'],
-      'intervention': 'HIGH RISK ANXIETY STRATEGY:\n\n1. Mindfulness Workshop: Enroll in the weekly campus anxiety management circle.\n2. Coping Packet: Send Exam Stress Management Guide & Guided Audio Packets.\n3. Follow-up: Schedule standard progress check-in within 3 days.',
-      'contacted': false,
-    },
-    {
-      'uuid': '1d2e3f4a-5b6c-7d8e-9f0a-1b2c3d4e5f6g',
-      'riskLevel': 'HIGH',
-      'timestamp': '2026-06-02 14:05',
-      'depression': 19, // Moderate (14-20)
-      'anxiety': 13,    // Moderate (10-14)
-      'stress': 25,     // Moderate (19-25)
-      'ruleTriggered': 'Rule R-003: MODERATE (Escalated)',
-      'ruleDescription': 'Evaluated as MODERATE but escalated to HIGH due to concurrent moderate scores across all three sub-scales indicating complex distress.',
-      'tacitBadges': ['Rule R-C01: Multi-Domain Moderate Escalation', 'Rule R-C03: Repeat High-Risk Student Override'],
-      'intervention': 'SYSTEMIC MULTI-DOMAIN ESCALATION STRATEGY:\n\n1. Priority Intake: Escalated due to co-occurring moderate distress in Depression, Anxiety, and Stress. Schedule intake within 72 hours.\n2. General Coping Packet: Dispatch Coping Packet G-04 (General Wellness, Sleep Hygiene, and Routine Balance).\n3. Faculty Liaison: Monitor academic performance indicators.',
-      'contacted': false,
-    },
-  ];
 
   void _onStudentSelected(Map<String, dynamic> student) {
     setState(() {
@@ -347,13 +297,13 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                                 Expanded(
                                   child: _KpiCard(
                                     title: 'Total Assessed',
-                                    value: '184',
+                                    value: '${_campusAnalytics?['totalAssessed'] ?? 0}',
                                     icon: Icons.people_outline,
                                     iconColor: const Color(0xFF354B0E),
                                     iconBg: const Color(0xFFE2EBE2),
-                                    subtitle: const Text(
-                                      '+12% assessed this semester',
-                                      style: TextStyle(fontSize: 11, color: Color(0xFF354B0E), fontWeight: FontWeight.bold),
+                                    subtitle: Text(
+                                      'Students assessed (${_campusAnalytics != null ? "current semester" : "loading..."})',
+                                      style: const TextStyle(fontSize: 11, color: Color(0xFF354B0E), fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -379,12 +329,21 @@ class _CounsellorHighRiskState extends State<CounsellorHighRisk> {
                                     icon: Icons.analytics_outlined,
                                     iconColor: const Color(0xFFEF6C00),
                                     iconBg: const Color(0xFFFFF3E0),
-                                    subtitle: const Column(
+                                    subtitle: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('Depression: 14.5/42 (Mod)', style: TextStyle(fontSize: 10, color: Color(0xFF666666))),
-                                        Text('Anxiety: 13.2/42 (Mod)', style: TextStyle(fontSize: 10, color: Color(0xFF666666))),
-                                        Text('Stress: 16.8/42 (Mild)', style: TextStyle(fontSize: 10, color: Color(0xFF666666))),
+                                        Text(
+                                          'Depression: ${(_campusAnalytics?['averageScores']?['dep'] as num?)?.toStringAsFixed(1) ?? 'N/A'}/42',
+                                          style: const TextStyle(fontSize: 10, color: Color(0xFF666666)),
+                                        ),
+                                        Text(
+                                          'Anxiety: ${(_campusAnalytics?['averageScores']?['anx'] as num?)?.toStringAsFixed(1) ?? 'N/A'}/42',
+                                          style: const TextStyle(fontSize: 10, color: Color(0xFF666666)),
+                                        ),
+                                        Text(
+                                          'Stress: ${(_campusAnalytics?['averageScores']?['str'] as num?)?.toStringAsFixed(1) ?? 'N/A'}/42',
+                                          style: const TextStyle(fontSize: 10, color: Color(0xFF666666)),
+                                        ),
                                       ],
                                     ),
                                   ),

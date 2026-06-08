@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 import 'counsellor_high_risk.dart';
 import 'knowledge_base.dart';
 
@@ -11,30 +12,44 @@ class CounsellorDashboard extends StatefulWidget {
 
 class _CounsellorDashboardState extends State<CounsellorDashboard> {
   String _selectedNav = 'Dashboard';
+  Map<String, dynamic>? _analytics;
+  List<Map<String, dynamic>> flaggedStudents = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final results = await Future.wait([
+        ApiService.getCampusAnalytics(),
+        ApiService.getHighRiskQueue(),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _analytics = results[0] as Map<String, dynamic>;
+          flaggedStudents = results[1] as List<Map<String, dynamic>>;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   void _handleAccountAction(String? value) {
     if (value == 'logout') {
       Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
-
-  // Sample flagged students data
-  final List<Map<String, dynamic>> flaggedStudents = [
-    {
-      'name': 'Aiman Tan',
-      'id': 'S001',
-      'severity': 'Severe',
-      'date': '5/17/2026',
-      'scores': {'depression': 24, 'anxiety': 20, 'stress': 28},
-    },
-    {
-      'name': 'Priya Raman',
-      'id': 'S002',
-      'severity': 'Extremely Severe',
-      'date': '5/16/2026',
-      'scores': {'depression': 28, 'anxiety': 26, 'stress': 32},
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -230,49 +245,51 @@ class _CounsellorDashboardState extends State<CounsellorDashboard> {
                     const SizedBox(height: 40),
 
                     // Statistics Cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _StatCard(
-                            label: 'Students tracked',
-                            value: '8',
-                            icon: Icons.people_outline,
-                            iconBgColor: const Color(0xFFE2EBE2),
-                            iconColor: const Color(0xFF354B0E),
+                    _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : Row(
+                            children: [
+                              Expanded(
+                                child: _StatCard(
+                                  label: 'Students tracked',
+                                  value: '${_analytics?['totalAssessed'] ?? 0}',
+                                  icon: Icons.people_outline,
+                                  iconBgColor: const Color(0xFFE2EBE2),
+                                  iconColor: const Color(0xFF354B0E),
+                                ),
+                              ),
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: _StatCard(
+                                  label: 'High-risk',
+                                  value: '${((_analytics?['riskLevelCounts']?['HIGH'] ?? 0) as int) + ((_analytics?['riskLevelCounts']?['CRITICAL'] ?? 0) as int)}',
+                                  icon: Icons.warning_amber_rounded,
+                                  iconBgColor: const Color(0xFFFDE8E8),
+                                  iconColor: const Color(0xFFD32F2F),
+                                ),
+                              ),
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: _StatCard(
+                                  label: 'Avg Depression',
+                                  value: '${(_analytics?['averageScores']?['dep'] as num?)?.round() ?? 0}',
+                                  icon: Icons.show_chart,
+                                  iconBgColor: const Color(0xFFE2EBE2),
+                                  iconColor: const Color(0xFF354B0E),
+                                ),
+                              ),
+                              const SizedBox(width: 24),
+                              Expanded(
+                                child: _StatCard(
+                                  label: 'Avg Anxiety',
+                                  value: '${(_analytics?['averageScores']?['anx'] as num?)?.round() ?? 0}',
+                                  icon: Icons.show_chart,
+                                  iconBgColor: const Color(0xFFE2EBE2),
+                                  iconColor: const Color(0xFF354B0E),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _StatCard(
-                            label: 'High-risk',
-                            value: '8',
-                            icon: Icons.warning_amber_rounded,
-                            iconBgColor: const Color(0xFFFDE8E8),
-                            iconColor: const Color(0xFFD32F2F),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _StatCard(
-                            label: 'Avg Depression',
-                            value: '23',
-                            icon: Icons.show_chart,
-                            iconBgColor: const Color(0xFFE2EBE2),
-                            iconColor: const Color(0xFF354B0E),
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Expanded(
-                          child: _StatCard(
-                            label: 'Avg Anxiety',
-                            value: '23',
-                            icon: Icons.show_chart,
-                            iconBgColor: const Color(0xFFE2EBE2),
-                            iconColor: const Color(0xFF354B0E),
-                          ),
-                        ),
-                      ],
-                    ),
                     const SizedBox(height: 40),
 
                     // Two-Column Content
