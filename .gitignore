@@ -76,3 +76,11 @@ lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+
+# Secrets and credentials (CRITICAL - NEVER COMMIT)
+backend/firebase-key.json
+backend/.env
+.env
+.env.local
+*.key
+*.pem
