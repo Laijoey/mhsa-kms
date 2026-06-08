@@ -371,7 +371,7 @@ class _KnowledgeBasePageState extends State<KnowledgeBasePage> {
                                   decoration: BoxDecoration(
                                     color:
                                         _getCategoryColor(resource['category'])
-                                            .withValues(alpha: 0.1),
+                                            .withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
