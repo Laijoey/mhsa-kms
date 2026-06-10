@@ -693,7 +693,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 ),
                 child: Text(
                   rule['isActive'] == true
-                      ? 'Rule evaluated successfully.\nTriggers downstream system actions:\n' + (rule['actions'] as List<String>).map((a) => '• $a').join('\n')
+                      ? 'Rule evaluated successfully.\nTriggers downstream system actions:\n' + (rule['actions'] as List).map((a) => '• $a').join('\n')
                       : 'Rule evaluations blocked. Rule status is currently INACTIVE. Live assessment flows remain unaffected.',
                   style: TextStyle(
                     fontFamily: 'monospace',
