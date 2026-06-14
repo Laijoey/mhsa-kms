@@ -9,6 +9,7 @@ class AdminDashboard extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboard> {
+
   // Active Tab Index: 0 = Questions, 1 = Rules, 2 = Knowledge Base
   int _activeTabIndex = 0;
 
@@ -104,17 +105,121 @@ class _AdminDashboardState extends State<AdminDashboard> {
       },
       {
         'id': 'Q6',
-        'text': 'I was inclined to over-react to situations',
+        'text': 'I tended to over-react to situations',
         'category': 'Stress',
         'weight': 0.9,
         'status': 'Active',
-        'mappedRules': ['Rule R-C02'],
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q7',
+        'text': 'I experienced trembling',
+        'category': 'Anxiety',
+        'weight': 0.9,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q8',
+        'text': 'I felt that I was using a lot of nervous energy',
+        'category': 'Stress',
+        'weight': 1.2,
+        'status': 'Active',
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q9',
+        'text': 'I was worried about situations in which I might panic',
+        'category': 'Anxiety',
+        'weight': 0.9,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q10',
+        'text': 'I felt that I had nothing to look forward to',
+        'category': 'Depression',
+        'weight': 1.2,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q11',
+        'text': 'I found myself getting agitated',
+        'category': 'Stress',
+        'weight': 1.0,
+        'status': 'Active',
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q12',
+        'text': 'I found it difficult to relax',
+        'category': 'Stress',
+        'weight': 1.1,
+        'status': 'Active',
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q13',
+        'text': 'I felt down-hearted and blue',
+        'category': 'Depression',
+        'weight': 0.9,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q14',
+        'text': 'I was intolerant of anything that kept me from getting on with what I was doing',
+        'category': 'Stress',
+        'weight': 0.9,
+        'status': 'Active',
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q15',
+        'text': 'I felt I was close to panic',
+        'category': 'Anxiety',
+        'weight': 1.0,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q16',
+        'text': 'I was unable to become enthusiastic about anything',
+        'category': 'Depression',
+        'weight': 1.1,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q17',
+        'text': 'I felt I wasn\'t worth much as a person',
+        'category': 'Depression',
+        'weight': 1.2,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q18',
+        'text': 'I felt that I was rather touchy',
+        'category': 'Stress',
+        'weight': 0.9,
+        'status': 'Active',
+        'mappedRules': ['Rule R-C02', 'Rule R-C01'],
       },
       {
         'id': 'Q19',
-        'text': 'I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase)',
+        'text': 'I was aware of the action of my heart in the absence of physical exertion',
         'category': 'Anxiety',
-        'weight': 1.3,
+        'weight': 1.0,
+        'status': 'Active',
+        'mappedRules': ['Rule R-001', 'Rule R-C01'],
+      },
+      {
+        'id': 'Q20',
+        'text': 'I felt scared without any good reason',
+        'category': 'Anxiety',
+        'weight': 1.1,
         'status': 'Active',
         'mappedRules': ['Rule R-001', 'Rule R-C01'],
       },
@@ -122,7 +227,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         'id': 'Q21',
         'text': 'I felt that life was meaningless',
         'category': 'Depression',
-        'weight': 1.5,
+        'weight': 1.2,
         'status': 'Active',
         'mappedRules': ['Rule R-001', 'Rule R-C01'],
       },
@@ -804,132 +909,118 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  // Header Builder matches system's layout theme
+  //navigation bar
   Widget _buildHeader() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Logo & Title
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF354B0E), // Forest green
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.eco,
-                  color: Colors.white,
-                  size: 24,
-                ),
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 6), 
+    decoration: const BoxDecoration(
+      color: Color(0xFFF5EFE7),
+      border: Border(
+        bottom: BorderSide(color: Color(0xFFE0E0E0), width: 1),
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+
+        // ================= LOGO =================
+        Row(
+          children: [
+            Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: const Color(0xFF354B0E),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(width: 12),
-              const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'MHSA-KMS',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF1A1A1A),
-                    ),
+              child: const Icon(Icons.eco, color: Colors.white, size: 22),
+            ),
+            const SizedBox(width: 10),
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'MHSA-KMS',
+                  style: TextStyle(
+                    fontSize: 16, 
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1A1A1A),
                   ),
-                  Text(
-                    'MENTAL HEALTH KNOWLEDGE SYSTEM',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Color(0xFF999999),
-                      letterSpacing: 0.5,
-                    ),
+                ),
+                Text(
+                  'MENTAL HEALTH SYSTEM',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Color(0xFF999999),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        // ================= NAV + ACCOUNT =================
+        Row(
+          children: [
+
+            // NAV TABS
+            _NavButton(
+              label: 'Questions',
+              isActive: _activeTabIndex == 0,
+              onTap: () => setState(() => _activeTabIndex = 0),
+            ),
+            const SizedBox(width: 30),
+
+            _NavButton(
+              label: 'Rules',
+              isActive: _activeTabIndex == 1,
+              onTap: () => setState(() => _activeTabIndex = 1),
+            ),
+            const SizedBox(width: 30),
+
+            _NavButton(
+              label: 'Knowledge Base',
+              isActive: _activeTabIndex == 2,
+              onTap: () => setState(() => _activeTabIndex = 2),
+            ),
+
+            const SizedBox(width: 40),
+
+            // ================= DROPDOWN =================
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFFDDD5CE)),
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              child: DropdownButton<String>(
+                value: 'Admin',
+                underline: const SizedBox(),
+                icon: const Icon(Icons.keyboard_arrow_down, size: 18),
+                style: const TextStyle(
+                  fontSize: 14, 
+                  color: Color(0xFF1A1A1A),
+                ),
+                items: const [
+                  DropdownMenuItem(
+                    value: 'Admin',
+                    child: Text('Admin'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'logout',
+                    child: Text('Logout'),
                   ),
                 ],
+                onChanged: _handleAccountAction,
               ),
-            ],
-          ),
-          // Nav buttons
-          Row(
-            children: [
-              _NavButton(
-                label: 'Questions',
-                isActive: _activeTabIndex == 0,
-                onTap: () {
-                  setState(() {
-                    _activeTabIndex = 0;
-                  });
-                },
-              ),
-              const SizedBox(width: 40),
-              _NavButton(
-                label: 'Rules',
-                isActive: _activeTabIndex == 1,
-                onTap: () {
-                  setState(() {
-                    _activeTabIndex = 1;
-                  });
-                },
-              ),
-              const SizedBox(width: 40),
-              _NavButton(
-                label: 'Knowledge Base',
-                isActive: _activeTabIndex == 2,
-                onTap: () {
-                  setState(() {
-                    _activeTabIndex = 2;
-                  });
-                },
-              ),
-              const SizedBox(width: 100),
-              // Account Actions dropdown
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xFFDDD5CE)),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: DropdownButton<String>(
-                  value: 'Admin',
-                  underline: const SizedBox(),
-                  items: const [
-                    DropdownMenuItem(
-                      value: 'Admin',
-                      child: Text(
-                        'Admin',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF1A1A1A),
-                        ),
-                      ),
-                    ),
-                    DropdownMenuItem(
-                      value: 'logout',
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFFD32F2F),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                  onChanged: _handleAccountAction,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
   // Welcome sub-header containing original styling
   Widget _buildSubHeader() {
@@ -1906,28 +1997,24 @@ class _NavButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: isActive ? const Color(0xFF1A1A1A) : const Color(0xFF999999),
-            ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
+        ),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF354B0E) : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            color: isActive ? Colors.white : const Color(0xFF999999),
           ),
-          const SizedBox(height: 8),
-          if (isActive)
-            Container(
-              width: 40,
-              height: 3,
-              decoration: BoxDecoration(
-                color: const Color(0xFF354B0E),
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }
